@@ -8,9 +8,4 @@
 // Last update Sat Sep 29 14:52:36 2017 Axel Drozdzynski
 //
 
-class AListener
-{
-public:
-    ~AListener();
-    void virtual run() = 0;
-}
+#include "AListener.hh"
