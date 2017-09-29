@@ -8,9 +8,9 @@ include_directories( ${Boost_INCLUDE_DIRS} )
 
 include_directories(include/server)
 
-file(GLOB SOURCE_SRV
+file(GLOB_RECURSE SOURCE_SRV
         src/server/*.cpp)
-file(GLOB INCLUDE_SRV
+file(GLOB_RECURSE INCLUDE_SRV
         include/server/*.hpp)
 
 add_executable(cpp_spider_server ${INCLUDE_SRV} ${SOURCE_SRV})
