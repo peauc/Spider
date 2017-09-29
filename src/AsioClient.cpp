@@ -4,8 +4,7 @@
 
 #include "AsioClient.hpp"
 
-AsioClient::AsioClient()
-{
+AsioClient::AsioClient(){
 
 }
 

@@ -7,10 +7,10 @@
 
 #include "AsioServer.hpp"
 
-class KeyloggerServer : public AsioServer {
+class SpiderServer : public AsioServer {
 public:
-	KeyloggerServer();
-	~KeyloggerServer();
+	SpiderServer();
+	~SpiderServer();
 };
 
 #endif //CPP_SPIDER_KEYLOGGERSERVER_HPP

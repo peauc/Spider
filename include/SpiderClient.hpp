@@ -7,10 +7,10 @@
 
 #include "AsioClient.hpp"
 
-class KeyloggerClient : public AsioClient {
+class SpiderClient : public AsioClient {
 public:
-	KeyloggerClient();
-	~KeyloggerClient();
+	SpiderClient();
+	~SpiderClient();
 };
 
 #endif //CPP_SPIDER_KEYLOGGERCLIENT_HPP
