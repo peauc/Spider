@@ -8,4 +8,6 @@
 // Last update Sat Sep 29 14:55:19 2017 Axel Drozdzynski
 //
 
+#include "stdafx.h"
+
 #include "KeyboardListener.hh"
