@@ -6,10 +6,8 @@
 #include <iostream>
 #include <boost/array.hpp>
 
-AsioClient::AsioClient()
-{
-  //this->port = port;
-  //this->socket.
+AsioClient::AsioClient(){
+
 }
 
 AsioClient::~AsioClient()

@@ -6,6 +6,7 @@
 
 AsioServer::AsioServer()
 {
+	_io_service.run();
 
 }
 AsioServer::~AsioServer()

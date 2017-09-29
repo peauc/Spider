@@ -8,8 +8,8 @@
 // Last update Sat Sep 29 14:53:58 2017 Axel Drozdzynski
 //
 
-#ifndef ALISTERNER_HH_
-# define ALISTERNER_HH_
+#ifndef ALISTENER_HH_
+# define ALISTENER_HH_
 
 class AListener
 {
@@ -18,4 +18,4 @@ public:
     void virtual run() = 0;
 };
 
-#endif /* !ALISTERNER_HH_ */
+#endif /* !ALISTENER_HH_ */
