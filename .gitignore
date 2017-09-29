@@ -54,7 +54,6 @@ dkms.conf
 
 #clion
 .idea/
-CMakeLists.txt
 cmake-build-debug/
 Supprimerait main.c
 
