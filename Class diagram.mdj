@@ -6231,6 +6231,29 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAFeza8vh0qyR+w="
 							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFeze1dvISczX4=",
+							"_parent": {
+								"$ref": "AAAAAAFex5fKAwSzoIo="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 952,
+							"top": 624,
+							"width": 71,
+							"height": 103,
+							"autoResize": false,
+							"text": "Creer une structure template pour les data et la mutex",
+							"wordWrap": true
 						}
 					]
 				},
