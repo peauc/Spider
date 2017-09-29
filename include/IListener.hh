@@ -5,7 +5,7 @@
 // Login   <drozdz_b>
 //
 // Started on  Sat Sep 29 14:27:00 2017 Axel Drozdzynski
-// Last update Sat Sep 29 14:48:55 2017 Axel Drozdzynski
+// Last update Sat Sep 29 14:52:44 2017 Axel Drozdzynski
 //
 
 #ifndef ILISTENER_HH_
@@ -13,7 +13,7 @@
 
 class IListener
 {
-private:
+public:
     ~IListener();
     virtual void run() = 0;
 }
