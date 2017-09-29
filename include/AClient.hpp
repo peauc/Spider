@@ -7,9 +7,9 @@
 
 class AClient {
 public:
-	virtual bool start() = 0;
+	/*virtual bool start() = 0;
 	virtual bool connect() = 0;
-	virtual bool stop() = 0;
+	virtual bool stop() = 0;*/
 private:
 };
 
