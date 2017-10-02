@@ -13,7 +13,8 @@ public:
 	AsioServer();
 	virtual ~AsioServer();
 private:
-	boost::asio::io_service _io_service;
+	boost::asio::ip::tcp::socket tcpSocket;
+	boost::asio::io_service _ioService;
 };
 
 #endif //CPP_SPIDER_ASIOSERVER_HPP
