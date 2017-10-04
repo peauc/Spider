@@ -9,7 +9,7 @@ class AServer {
 public:
 	virtual bool run() = 0;
 	virtual bool stop() = 0;
-	virtual ~Server() = 0;
+	virtual ~AServer() = 0;
 private:
 };
 
