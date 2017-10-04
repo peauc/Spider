@@ -3,11 +3,13 @@
 //
 
 #include "AsioClient.hpp"
+#include <boost/bind.hpp>
 #include <iostream>
 #include <boost/array.hpp>
 
-AsioClient::AsioClient(){
-
+AsioClient::AsioClient(boost::asio::io_service &io_service, int port): socket(io_service)
+{
+  this->port = port;
 }
 
 AsioClient::~AsioClient()
@@ -17,37 +19,46 @@ AsioClient::~AsioClient()
 
 void 		AsioClient::try_send(std::string host, int port)
 {
-  boost::asio::io_service ios;
-
-  std::string message = "toto le noichpute";
-
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), port);
 
-  boost::asio::ip::tcp::socket socket(ios);
+  std::string message = "ping";
+  int 		i = 0;
 
-  std::cout << "here" << std::endl;
   boost::system::error_code ec;
-  socket.connect(endpoint, ec);
+  this->socket.connect(endpoint, ec);
   if (ec)
-  {
     std::cout << "error" << std::endl;
-
+  boost::array<char, 1024> buf;
+  while (1) {
+    i++;
+    std::copy(message.begin(), message.end(), buf.begin());
+    boost::system::error_code error;
+    if (i == 10)
+    {
+      boost::asio::async_write(socket, boost::asio::buffer(buf),  boost::bind(&AsioClient::handle_read_status_line, this,
+                                                                             boost::asio::placeholders::error));
+      sleep(3);
+      std::cout << "out of sleep \n";
+      exit(1);
+      std::cout << "BITE" << std::endl;
+      i = 0;
+    }
+   // this->socket.write_some(boost::asio::buffer(buf, message.size()), error);
   }
-  std::cout << "here2" << std::endl;
-
-  boost::array<char, 256> buf;
-  std::copy(message.begin(),message.end(),buf.begin());
-  std::cout << "here3" << std::endl;
-  boost::system::error_code error;
-  socket.write_some(boost::asio::buffer(buf, message.size()), error);
-  std::cout << "here4" << std::endl;
-  socket.close();
+  this->socket.close();
 }
 
-int main()
+int main(int ac, char **av)
 {
-  AsioClient	Asiatic;
+  boost::asio::io_service io_service;
+  io_service.run();
 
-  Asiatic.try_send("127.0.0.1", 4142);
+  if (ac != 2)
+  {
+    std::cout << "Usage: ./client <port>" << std::endl;
+    return 0;
+  }
+  AsioClient	Asiatic(io_service, std::stoi(av[1]));
+  Asiatic.try_send("127.0.0.1", std::stoi(av[1]));
   return 0;
 }
