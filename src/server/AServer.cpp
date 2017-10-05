@@ -4,7 +4,7 @@
 
 #include "AServer.hpp"
 
-bool AServer::run() {
+bool AServer::start() {
 	return (false);
 }
 
