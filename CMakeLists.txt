@@ -7,11 +7,14 @@ find_package(Boost REQUIRED COMPONENTS system thread filesystem regex)
 include_directories( ${Boost_INCLUDE_DIRS} )
 
 include_directories(include/server)
+include_directories(include/)
 
 file(GLOB_RECURSE SOURCE_SRV
-        src/server/*.cpp)
+        src/server/*.cpp
+        src/*.cpp)
 file(GLOB_RECURSE INCLUDE_SRV
-        include/server/*.hpp)
+        include/server/*.hpp
+        include/*.h)
 
 add_executable(cpp_spider_server ${INCLUDE_SRV} ${SOURCE_SRV})
 target_link_libraries(cpp_spider_server

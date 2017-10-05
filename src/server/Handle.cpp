@@ -24,7 +24,7 @@ void	AsioClient::handle_write_request(const boost::system::error_code err)
   }
 }
 
-void AsioClient::handle_read_status_line(const boost::system::error_code& err)
+void	AsioClient::handle_read_status_line(const boost::system::error_code& err)
 {
   if (!err)
   {
@@ -45,7 +45,7 @@ void AsioClient::handle_read_status_line(const boost::system::error_code& err)
   }
 }
 
-void AsioClient::handle_read_headers(const boost::system::error_code& err)
+void	AsioClient::handle_read_headers(const boost::system::error_code& err)
 {
   if (!err)
   {
@@ -67,7 +67,7 @@ void AsioClient::handle_read_headers(const boost::system::error_code& err)
   }
 }
 
-void AsioClient::handle_read_content(const boost::system::error_code& err)
+void	AsioClient::handle_read_content(const boost::system::error_code& err)
 {
   if (!err)
   {
