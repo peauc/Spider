@@ -10,11 +10,9 @@ include_directories(include/server)
 include_directories(include/)
 
 file(GLOB_RECURSE SOURCE_SRV
-        src/server/*.cpp
-        src/*.cpp)
+        src/server/*.cpp)
 file(GLOB_RECURSE INCLUDE_SRV
-        include/server/*.hpp
-        include/*.h)
+        include/server/*.hpp)
 
 add_executable(cpp_spider_server ${INCLUDE_SRV} ${SOURCE_SRV})
 target_link_libraries(cpp_spider_server
