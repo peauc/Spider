@@ -38,7 +38,9 @@ void 		AsioClient::try_send(std::string host, int port)
       boost::asio::async_write(socket, boost::asio::buffer(buf),  boost::bind(&AsioClient::handle_read_status_line, this,
                                                                              boost::asio::placeholders::error));
       sleep(3);
+      std::cout << "out of sleep \n";
       exit(1);
+      std::cout << "BITE" << std::endl;
       i = 0;
     }
    // this->socket.write_some(boost::asio::buffer(buf, message.size()), error);
@@ -46,7 +48,7 @@ void 		AsioClient::try_send(std::string host, int port)
   this->socket.close();
 }
 
-/*int main(int ac, char **av)
+int main(int ac, char **av)
 {
   boost::asio::io_service io_service;
   io_service.run();
@@ -59,4 +61,4 @@ void 		AsioClient::try_send(std::string host, int port)
   AsioClient	Asiatic(io_service, std::stoi(av[1]));
   Asiatic.try_send("127.0.0.1", std::stoi(av[1]));
   return 0;
-}*/
+}
