@@ -13,12 +13,17 @@ int main()
 	{
 		AsioServer server;
 
-		server.run();
+		server.start();
+		while(server.shouldRun())
+		{
+			server.tick();
+
+			sleep(1);
+		}
 	}
 	catch (std::exception &e)
 	{
 		std::cerr << "Error -> " << e.what() << std::endl;
 	}
-	while (1);
 	return (0);
 }

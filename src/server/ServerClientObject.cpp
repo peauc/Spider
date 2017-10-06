@@ -17,22 +17,11 @@ boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
 	return (_socket);
 }
 
+
+
 void ServerClientObject::start()
 {
 	std::cout << "Starting a new client\n";
-	// The data to be sent is stored in the class member m_message
-	// as we need to keep the data valid
-	// until the asynchronous operation is complete.
-
-	// When initiating the asynchronous operation,
-	// and if using boost::bind(),
-	// we must specify only the arguments
-	// that match the handler's parameter list.
-	// In this code, both of the argument placeholders
-	// (boost::asio::placeholders::error
-	// and boost::asio::placeholders::bytes_transferred)
-	// could potentially have been removed,
-	// since they are not being used in handle_write().
 	boost::asio::async_write(_socket, boost::asio::buffer("hello client\n"),
 	                         boost::bind(&ServerClientObject::handle_write, shared_from_this(),
 	                                     boost::asio::placeholders::error,
@@ -44,3 +33,28 @@ void ServerClientObject::handle_write(const boost::system::error_code &error /*e
 	std::cout << "Has writen " << bytes << std::endl;
 }
 
+void ServerClientObject::tryReading()
+{
+	boost::asio::async_read(_socket, _buffer,
+	                        boost::asio::transfer_at_least(1),
+	                        boost::bind(&ServerClientObject::readContentHandler, this,
+	                                    boost::asio::placeholders::error));
+}
+
+void ServerClientObject::readContentHandler(const boost::system::error_code &err)
+{
+	if (!err)
+	{
+		// Write all of the data that has been read so far.
+		std::cout << &_buffer;
+
+		// Continue reading remaining data until EOF.
+		boost::asio::async_read(_socket, _buffer,
+		                        boost::asio::transfer_at_least(1),
+		                        boost::bind(&ServerClientObject::readContentHandler, this,
+		                                    boost::asio::placeholders::error));
+	} else if (err != boost::asio::error::eof)
+	{
+		std::cout << "Error: " << err << "\n";
+	}
+}

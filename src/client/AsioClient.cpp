@@ -55,7 +55,7 @@ void 		AsioClient::try_send(std::string host)
   this->socket.close();
 }
 
-int main(int ac, char **av)
+/*int main(int ac, char **av)
 {
   boost::asio::io_service io_service;
   io_service.run();
@@ -68,4 +68,4 @@ int main(int ac, char **av)
   AsioClient	Asiatic(io_service, std::stoi(av[1]));
   Asiatic.try_send("127.0.0.1");
   return 0;
-}
+}*/
