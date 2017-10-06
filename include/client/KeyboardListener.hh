@@ -1,20 +1,23 @@
-//
-// KeyboardListener.hh for KeyboardListener in c:\Users\49207\Documents\Epitech-Rendu\cpp_spider\include
-//
-// Made by Axel Drozdzynski
-// Login   <drozdz_b>
-//
-// Started on  Sat Sep 29 14:58:20 2017 Axel Drozdzynski
-// Last update Sat Sep 29 14:58:20 2017 Axel Drozdzynski
-//
+#ifndef KEYBOARDLISTENER_HH_
+#define KEYBOARDLISTENER_HH_
 
-#ifndef KEYBOARDLISTERNER_HH_
-# define KEYBOARDLISTERNER_HH_
+#include <windows.h>
+#include <string>
+#include <list>
 
-# include "AListener.hh"
+#include "IListener.hh"
 
-class KeyboardListener : AListener
+typedef int(__cdecl *f_dllfunc)(void);
+
+class KeyboardListener : public IListener
 {
+private:
+	HINSTANCE _dll;
+
+public:
+	virtual int run();
+	virtual int stop();
+	virtual void DoSomething();
 };
 
-#endif /* !ALISTERNER_HH_ */
+#endif

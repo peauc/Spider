@@ -7,64 +7,62 @@
 #include <boost/array.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/bind.hpp>
-#include "AsioClient.hpp"
+#include "client/AsioClient.hpp"
 
 
-void AsioClient::handle_read_status_line(const boost::system::error_code& err)
+void AsioClient::handle_read_state(const boost::system::error_code& error)
 {
-	if (!err)
+	if (!error)
 	{
-		std::istream response_stream(&response);
-		std::string http_version;
-		response_stream >> http_version;
-		unsigned int status_code;
-		response_stream >> status_code;
-		std::string status_message;
-		std::getline(response_stream, status_message);
-		boost::asio::async_read(socket, response,
-		                        boost::bind(&AsioClient::handle_read_headers, this,
+		std::istream stream_answer(&this->answer);
+		unsigned int c_state;
+		stream_answer >> c_state;
+		std::string m_state;
+		std::getline(stream_answer, m_state);
+		boost::asio::async_read(this->socket, this->answer,
+		                        boost::bind(&AsioClient::handle_read_h, this,
 		                                    boost::asio::placeholders::error));
 	}
 	else
 	{
-		std::cout << "Error: " << err << "\n";
+		std::cout << "Error: " << error << "\n";
 	}
 }
 
-void AsioClient::handle_read_headers(const boost::system::error_code& err)
+void AsioClient::handle_read_h(const boost::system::error_code& error)
 {
-	if (!err)
+	if (!error)
 	{
-		std::istream response_stream(&response);
+		std::istream stream_answer(&answer);
 		std::string header;
-		while (std::getline(response_stream, header) && header != "\n")
+		while (std::getline(stream_answer, header) && header != "\n")
 			std::cout << header << "\n";
 		std::cout << "\n";
-		if (response.size() > 0)
-			std::cout << &response;
-		boost::asio::async_read(socket, response,
+		if (answer.size() > 0)
+			std::cout << &answer;
+		boost::asio::async_read(socket, answer,
 		                        boost::asio::transfer_at_least(1),
-		                        boost::bind(&AsioClient::handle_read_content, this,
+		                        boost::bind(&AsioClient::handle_read_body, this,
 		                                    boost::asio::placeholders::error));
 	}
 	else
 	{
-		std::cout << "Error: " << err << "\n";
+		std::cout << "Error: " << error << "\n";
 	}
 }
 
-void AsioClient::handle_read_content(const boost::system::error_code& err)
+void AsioClient::handle_read_body(const boost::system::error_code& error)
 {
-	if (!err)
+	if (!error)
 	{
-		std::cout << &response;
-		boost::asio::async_read(socket, response,
+		std::cout << &answer;
+		boost::asio::async_read(socket, answer,
 		                        boost::asio::transfer_at_least(1),
-		                        boost::bind(&AsioClient::handle_read_content, this,
+		                        boost::bind(&AsioClient::handle_read_body, this,
 		                                    boost::asio::placeholders::error));
 	}
-	else if (err != boost::asio::error::eof)
+	else if (error != boost::asio::error::eof)
 	{
-		std::cout << "Error: " << err << "\n";
+		std::cout << "Error: " << error << "\n";
 	}
 }

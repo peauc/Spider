@@ -14,8 +14,8 @@
 class IListener
 {
 public:
-    ~IListener();
-    virtual void run() = 0;
+	virtual int run() = 0;
+	virtual int stop() = 0;
 };
 
 #endif /* !ILISTENER_HH_ */

