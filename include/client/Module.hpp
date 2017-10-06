@@ -2,11 +2,11 @@
 // Created by lavigne on 10/5/17.
 //
 
-#ifndef TEST_MODULE_HPP
-#define TEST_MODULE_HPP
+#ifndef MODULE_HPP
+#define MODULE_HPP
 
 # include <glob.h>
-# include "Spider.h"
+# include "SpiderClient.hpp"
 
 class   Module
 {
@@ -18,4 +18,4 @@ public:
     size_t  getDataSize();
 };
 
-#endif //TEST_MODULE_HPP
+#endif //MODULE_HPP
