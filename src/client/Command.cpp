@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include <Spider.h>
-#include "Command.h"
+#include "client/SpiderClient.hpp"
+#include "client/Command.hpp"
 
 Command::Command() {}
 

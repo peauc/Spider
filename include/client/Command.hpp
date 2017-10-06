@@ -2,14 +2,14 @@
 // Created by lavigne on 10/4/17.
 //
 
-#ifndef TEST_COMMAND_H
-#define TEST_COMMAND_H
+#ifndef COMMAND_HPP
+#define COMMAND_HPP
 
 # include <string>
 # include <map>
 # include <cmath>
 # include <boost/archive/text_oarchive.hpp>
-# include "Module.h"
+# include "client/Module.hpp"
 
 class   Command
 {
@@ -20,4 +20,4 @@ public:
     t_paquet *getMessageFormat(Module);
 };
 
-#endif //TEST_COMMAND_H
+#endif //COMMAND_HPP

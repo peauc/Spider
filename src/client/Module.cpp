@@ -2,7 +2,7 @@
 // Created by lavigne on 10/5/17.
 //
 
-#include "Module.h"
+#include "client/Module.hpp"
 
 Module::Module() {}
 
