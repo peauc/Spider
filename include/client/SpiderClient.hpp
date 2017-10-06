@@ -5,7 +5,7 @@
 #ifndef CPP_SPIDER_KEYLOGGERCLIENT_HPP
 #define CPP_SPIDER_KEYLOGGERCLIENT_HPP
 
-#include "AsioClient.hpp"
+#include "client/AsioClient.hpp"
 
 class SpiderClient : public AsioClient {
 public:

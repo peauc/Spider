@@ -37,11 +37,11 @@ AsioClient::~AsioClient()
 void 		AsioClient::try_send(const std::string host)
 {
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), this->port);
-  //Command		command;
-  std::string 		message;
-  boost::system::error_code err;
-  boost::system::error_code error;
-  std::ostringstream 	ss;
+  std::string 			message;
+  boost::system::error_code 	err"";
+  boost::asio::const_buffer		f_buf;
+  boost::system::error_code 	error;
+  std::ostringstream 		ss;
 
   this->socket.connect(endpoint, err);
   if (err)
@@ -52,14 +52,13 @@ void 		AsioClient::try_send(const std::string host)
 			    boost::asio::transfer_at_least(1),
 			    boost::bind(&AsioClient::handle_read_body, this,
 					boost::asio::placeholders::error));
-    //ss << answer->data();
-    //message = buffer_to_string(answer);
+    message = answer_to_string(answer);
     if (this->check_exit(ss.str()))
       return ;
     //if (NULL != (message = command.process(this->modules, ss.str())))
 	//{
 	  std::copy(message.begin(), message.end(), buf.begin());
-	  boost::asio::async_write(socket, boost::asio::buffer(buf),
+	  boost::asio::async_write(socket, boost::asio::buffer(f_buf),
 				   boost::bind(&AsioClient::handle_read_state,
 					       this, boost::asio::placeholders::error));
 	//}
