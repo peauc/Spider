@@ -11,6 +11,9 @@
 # include <boost/archive/text_oarchive.hpp>
 # include "client/Module.hpp"
 
+class Module;
+typedef struct s_paquet t_paquet;
+
 class   Command
 {
 public:

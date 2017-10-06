@@ -6,7 +6,7 @@
 #define MODULE_HPP
 
 # include <glob.h>
-# include "SpiderClient.hpp"
+# include "client/SpiderClient.hpp"
 
 class   Module
 {

@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include "client/SpiderClient.hpp"
 #include "client/Command.hpp"
 
 Command::Command() {}
@@ -19,7 +18,7 @@ void                        Command::process(std::map<char, Module> modules, std
     boost::archive::text_oarchive   ar(os);
     char                            code = received[0];
 
-    Module                          module = modules[code];
+    Module                          module; // = modules[code];
     t_paquet                       *data = getMessageFormat(module);
     ar & data;
 }
@@ -35,7 +34,8 @@ t_paquet                    *Command::getMessageFormat(Module module)
     data->kbData = NULL;
     data->opcode = 0;
     data->opcode = module.getOpcode();
-    for (int i = 0; i < dataMax; i++) {
+  data->mouseData = NULL;
+    for (unsigned int i = 0; i < dataMax; i++) {
         module.addNextData(data);
     }
     return data;
