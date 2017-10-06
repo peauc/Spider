@@ -7,7 +7,7 @@
 #include <boost/array.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/bind.hpp>
-#include "AsioClient.hpp"
+#include "client/AsioClient.hpp"
 
 
 void AsioClient::handle_read_state(const boost::system::error_code& error)

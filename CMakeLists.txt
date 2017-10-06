@@ -6,8 +6,7 @@ set(CMAKE_VERBOSE_MAKEFILE 1)
 find_package(Boost REQUIRED COMPONENTS system thread filesystem regex)
 include_directories( ${Boost_INCLUDE_DIRS} )
 
-include_directories(include/server)
-include_directories(include/client)
+include_directories(include)
 
 file(GLOB_RECURSE SOURCE_SRV
         src/server/*.cpp)

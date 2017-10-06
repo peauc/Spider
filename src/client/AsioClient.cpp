@@ -5,7 +5,7 @@
 #include <boost/bind.hpp>
 #include <iostream>
 #include <boost/array.hpp>
-#include "AsioClient.hpp"
+#include "client/AsioClient.hpp"
 
 
 std::string answer_to_string( boost::asio::streambuf &answer)
@@ -38,7 +38,7 @@ void 		AsioClient::try_send(const std::string host)
 {
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), this->port);
   std::string 			message;
-  boost::system::error_code 	err"";
+  boost::system::error_code 	err;
   boost::asio::const_buffer		f_buf;
   boost::system::error_code 	error;
   std::ostringstream 		ss;
