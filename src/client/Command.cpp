@@ -12,7 +12,7 @@ Command::~Command() {}
 /*
  * Process découpe la commande reçu par le serveur puis la traite.
  */
-void                        Command::process(std::map<char, Module> modules, std::string received, boost::asio::streambuf &buf)
+bool                        Command::process(std::map<char, Module> modules, std::string received, boost::asio::streambuf &buf)
 {
     std::ostream                    os(&buf);
     boost::archive::text_oarchive   ar(os);
@@ -20,7 +20,10 @@ void                        Command::process(std::map<char, Module> modules, std
 
     Module                          module; // = modules[code];
     t_paquet                       *data = getMessageFormat(module);
-    ar & data;
+  ar & data;
+  if (data == NULL)
+    return false;
+  return true;
 }
 
 /*
@@ -35,8 +38,10 @@ t_paquet                    *Command::getMessageFormat(Module module)
     data->opcode = 0;
     data->opcode = module.getOpcode();
   data->mouseData = NULL;
-    for (unsigned int i = 0; i < dataMax; i++) {
+    for (unsigned int i = dataMax; i < dataMax; i++) {
         module.addNextData(data);
     }
+  if (data->kbData == NULL && data->mouseData == NULL)
+    return NULL;
     return data;
 }

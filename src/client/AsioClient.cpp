@@ -56,8 +56,7 @@ void 		AsioClient::try_send(const std::string host)
     message = answer_to_string(answer);
     if (this->stop(message))
       return ;
-    command.process(this->modules, "!", f_buf);
-    if (f_buf.size() != 0)
+    if (command.process(this->modules, "!", f_buf))
 	{
 	  std::copy(message.begin(), message.end(), buf.begin());
 	  boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),

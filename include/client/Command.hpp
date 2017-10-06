@@ -19,8 +19,8 @@ class   Command
 public:
     Command();
     ~Command();
-    void   process(std::map<char, Module>, std::string, boost::asio::streambuf &);
-    t_paquet *getMessageFormat(Module);
+    bool	process(std::map<char, Module>, std::string, boost::asio::streambuf &);
+    t_paquet	*getMessageFormat(Module);
 };
 
 #endif //COMMAND_HPP
