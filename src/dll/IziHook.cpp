@@ -1,7 +1,13 @@
-// KBHook.cpp : Définit le point d'entrée pour l'application console.
+//
+// IziHook.cpp for IziHook in c:\Users\49207\Documents\Epitech-Rendu\cpp_spider\src\dll
+//
+// Made by Axel Drozdzynski
+// Login   <drozdz_b>
+//
+// Started on  Sat Oct 6 19:25:58 2017 Axel Drozdzynski
+// Last update Sat Oct 6 19:26:02 2017 Axel Drozdzynski
 //
 
-#include "stdafx.h"
 
 #include <fstream>
 #include <ctime>

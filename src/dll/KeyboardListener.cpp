@@ -1,7 +1,12 @@
-// KeyboardListener.cpp : Définit le point d'entrée pour l'application console.
 //
-
-#include "stdafx.h"
+// KeyboardListener.cpp for KeyboardListener in c:\Users\49207\Documents\Epitech-Rendu\cpp_spider\src\dll
+//
+// Made by Axel Drozdzynski
+// Login   <drozdz_b>
+//
+// Started on  Sat Oct 6 19:25:34 2017 Axel Drozdzynski
+// Last update Sat Oct 6 19:26:04 2017 Axel Drozdzynski
+//
 
 #include <fstream>
 #include <thread>
