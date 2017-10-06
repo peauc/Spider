@@ -10,20 +10,6 @@
 #include "AsioClient.hpp"
 
 
-void	AsioClient::handle_write_request(const boost::system::error_code err)
-{
-  if (!err)
-  {
-    boost::asio::async_read(socket, response,
-				  boost::bind(&AsioClient::handle_read_status_line, this,
-					      boost::asio::placeholders::error));
-  }
-  else
-  {
-    std::cout << "Error: " << err.message() << "\n";
-  }
-}
-
 void	AsioClient::handle_read_status_line(const boost::system::error_code& err)
 {
   if (!err)

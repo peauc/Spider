@@ -33,8 +33,28 @@ void ServerClientObject::handle_write(const boost::system::error_code &error /*e
 	std::cout << "Has writen " << bytes << std::endl;
 }
 
-void ServerClientObject::readContentHandler(boost::system::error_code &errors)
+void ServerClientObject::tryReading()
 {
-
+	boost::asio::async_read(_socket, _buffer,
+	                        boost::asio::transfer_at_least(1),
+	                        boost::bind(&ServerClientObject::readContentHandler, this,
+	                                    boost::asio::placeholders::error));
 }
 
+void ServerClientObject::readContentHandler(const boost::system::error_code &err)
+{
+	if (!err)
+	{
+		// Write all of the data that has been read so far.
+		std::cout << &_buffer;
+
+		// Continue reading remaining data until EOF.
+		boost::asio::async_read(_socket, _buffer,
+		                        boost::asio::transfer_at_least(1),
+		                        boost::bind(&ServerClientObject::readContentHandler, this,
+		                                    boost::asio::placeholders::error));
+	} else if (err != boost::asio::error::eof)
+	{
+		std::cout << "Error: " << err << "\n";
+	}
+}

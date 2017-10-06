@@ -67,5 +67,21 @@ boost::asio::io_service &AsioServer::getIoService()
 void AsioServer::tick()
 {
 	_ioService.poll_one();
+	if (clientList.size() > 0)
+	{
+		clientList.begin()->get()->tryReading();
+	}
 	_ioService.reset();
+}
+bool AsioServer::sendMessageToClient(ServerClientObject &client, std::string message)
+{
+	//auto it = std::find(clientList.begin(), clientList.end(), client);
+	//if (it != clientList.end())
+	{
+
+	}
+}
+bool AsioServer::sendMessageToEveryClient(std::string message)
+{
+	return false;
 }

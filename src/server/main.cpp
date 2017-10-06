@@ -17,6 +17,7 @@ int main()
 		while(server.shouldRun())
 		{
 			server.tick();
+
 			sleep(1);
 		}
 	}
