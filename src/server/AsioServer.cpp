@@ -46,7 +46,6 @@ void AsioServer::handle_accept(ServerClientObject::shared_ptr new_client, const 
 
 void AsioServer::start_accept()
 {
-	std::cout << "Im starting to accept\n";
 	ServerClientObject::shared_ptr new_client = ServerClientObject::create(_acceptor.get_io_service());
 
 	_acceptor.async_accept(new_client->getSocket(),
@@ -67,10 +66,9 @@ boost::asio::io_service &AsioServer::getIoService()
 void AsioServer::tick()
 {
 	_ioService.poll_one();
-	if (clientList.size() > 0)
-	{
-		clientList.begin()->get()->tryReading();
-	}
+	start_accept();
+	addWorkToReadEveryClient();
+	printEveryClientBuffer();
 	_ioService.reset();
 }
 bool AsioServer::sendMessageToClient(ServerClientObject &client, std::string message)
@@ -80,8 +78,28 @@ bool AsioServer::sendMessageToClient(ServerClientObject &client, std::string mes
 	{
 
 	}
+	return (true);
 }
+
 bool AsioServer::sendMessageToEveryClient(std::string message)
 {
 	return false;
+}
+
+void AsioServer::addWorkToReadEveryClient()
+{
+	auto it = clientList.begin();
+
+	while (it != clientList.end())
+	{
+		it->get()->tryReading();
+		it++;
+	}
+}
+void AsioServer::printEveryClientBuffer()
+{
+	for (auto it = clientList.begin(); it < clientList.end(); it++)
+	{
+		std::cout << it - clientList.begin() << ":" << std::endl << it->get()->getInputBuffer();
+	}
 }

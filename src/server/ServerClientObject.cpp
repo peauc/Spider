@@ -8,7 +8,6 @@
 
 ServerClientObject::shared_ptr ServerClientObject::create(boost::asio::io_service &io_service)
 {
-	std::cout << "creating a new ServerClientObject\n";
 	return shared_ptr(new ServerClientObject(io_service));
 }
 
@@ -16,8 +15,6 @@ boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
 {
 	return (_socket);
 }
-
-
 
 void ServerClientObject::start()
 {
@@ -45,10 +42,9 @@ void ServerClientObject::readContentHandler(const boost::system::error_code &err
 {
 	if (!err)
 	{
-		// Write all of the data that has been read so far.
-		std::cout << &_buffer;
+		_inputBuffer << &_buffer;
 
-		// Continue reading remaining data until EOF.
+		//std::cout << &_buffer;
 		boost::asio::async_read(_socket, _buffer,
 		                        boost::asio::transfer_at_least(1),
 		                        boost::bind(&ServerClientObject::readContentHandler, this,
@@ -57,4 +53,11 @@ void ServerClientObject::readContentHandler(const boost::system::error_code &err
 	{
 		std::cout << "Error: " << err << "\n";
 	}
+}
+std::string ServerClientObject::getInputBuffer()
+{
+	std::string string;
+
+	string = _inputBuffer.str();
+	return (string);
 }

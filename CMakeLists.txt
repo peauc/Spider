@@ -13,7 +13,7 @@ file(GLOB_RECURSE SOURCE_SRV
         src/server/*.cpp)
 file(GLOB_RECURSE INCLUDE_SRV
         include/server/*.hpp)
-file(GLOB_RECURSE SOURCE_CLI                          l
+file(GLOB_RECURSE SOURCE_CLI
         src/client/*.cpp)
 file(GLOB_RECURSE INCLUDE_CLI
         include/client/*.h*)

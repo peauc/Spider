@@ -18,8 +18,10 @@ public:
 	AsioServer(AsioServer &server) = delete;
 	~AsioServer() override ;
 
+	void printEveryClientBuffer();
 	boost::asio::io_service &getIoService();
 	bool shouldRun();
+	void addWorkToReadEveryClient();
 	void handle_accept(ServerClientObject::shared_ptr new_client, const boost::system::error_code &error);
 	void tick();
 	bool sendMessageToClient(ServerClientObject &client, std::string message);
