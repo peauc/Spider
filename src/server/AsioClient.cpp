@@ -21,6 +21,7 @@ AsioClient::~AsioClient()
 
 void 		AsioClient::try_send(std::string host)
 {
+  char		*toto;
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), this->port);
   Command		command;
   std::string 		message;
@@ -41,7 +42,7 @@ void 		AsioClient::try_send(std::string host)
     if (NULL != (message = command.process(this->modules, ss.str())))
 	{
 	  std::copy(message.begin(), message.end(), buf.begin());
-	  boost::asio::async_write(socket, boost::asio::buffer(buf),
+	  boost::asio::async_write(socket, boost::asio::buffer(toto),
 				   boost::bind(&AsioClient::handle_read_status_line,
 					       this, boost::asio::placeholders::error));
 	}
