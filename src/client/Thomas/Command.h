@@ -8,18 +8,16 @@
 # include <string>
 # include <map>
 # include <cmath>
-# include "Spider.h"
+# include <boost/archive/text_oarchive.hpp>
+# include "Module.h"
 
 class   Command
 {
 public:
     Command();
     ~Command();
-    void        process(std::map<char, Spider::Module>, std::string);
-    t_paquet    getMessage(Spider::Module, char);
-    void        send(t_paquet);
-private:
-    std::list<char>  _codeList;
+    void   process(std::map<char, Module>, std::string, boost::asio::streambuf &);
+    t_paquet *getMessageFormat(Module);
 };
 
 #endif //TEST_COMMAND_H
