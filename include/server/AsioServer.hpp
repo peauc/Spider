@@ -6,7 +6,7 @@
 #define CPP_SPIDER_ASIOSERVER_HPP
 
 #include "AServer.hpp"
-#include "ServerClientObject.hpp"
+#include "server/ServerClientObject.hpp"
 
 class AsioServer : public AServer {
 public:
