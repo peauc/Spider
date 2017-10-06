@@ -16,15 +16,16 @@ public:
 	typedef boost::shared_ptr<ServerClientObject> shared_ptr;
 	static shared_ptr create(boost::asio::io_service &io_service);
 	boost::asio::ip::tcp::socket &getSocket();
+	void tryReading();
 
-	void readContentHandler(boost::system::error_code &errors);
 
 	void start();
 private:
 	explicit ServerClientObject(boost::asio::io_service &io_service) : _socket(io_service) {}
 	void handle_write(const boost::system::error_code & /*error*/, size_t /*bytes_transferred*/);
+	void readContentHandler(const boost::system::error_code &errors);
 
-	boost::asio::streambuf      buffer;
+	boost::asio::streambuf      _buffer;
 	bool                        hadRead;
 	boost::asio::ip::tcp::socket _socket;
 	std::string m_message;
