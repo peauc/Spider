@@ -38,7 +38,7 @@ t_paquet                    *Command::getMessageFormat(Module module)
     data->opcode = 0;
     data->opcode = module.getOpcode();
   data->mouseData = NULL;
-    for (unsigned int i = dataMax; i < dataMax; i++) {
+    for (unsigned int i = 0; i < dataMax; i++) {
         module.addNextData(data);
     }
   if (data->kbData == NULL && data->mouseData == NULL)

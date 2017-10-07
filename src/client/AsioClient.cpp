@@ -76,12 +76,12 @@ int main(int ac, char **av)
   boost::asio::io_service io_service;
   io_service.run();
 
-  if (ac != 2)
+  if (ac != 3)
   {
-    std::cout << "Usage: ./client <port>" << std::endl;
+    std::cout << "Usage: ./client <ip_adress> <port>" << std::endl;
     return 0;
   }
-  AsioClient	Asiatic(io_service, std::stoi(av[1]));
-  Asiatic.try_send("127.0.0.1");
+  AsioClient	Asiatic(io_service, (unsigned short)std::stoi(av[2]));
+  Asiatic.try_send(av[1]);
   return 0;
 }

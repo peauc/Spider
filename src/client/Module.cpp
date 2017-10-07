@@ -6,7 +6,7 @@
 
 Module::Module()
 {
-    LoadLibrary()
+//    LoadLibrary()
 }
 
 Module::~Module()

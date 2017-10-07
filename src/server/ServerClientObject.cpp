@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <boost/bind.hpp>
-#include "ServerClientObject.hpp"
+#include "server/ServerClientObject.hpp"
 
 ServerClientObject::shared_ptr ServerClientObject::create(boost::asio::io_service &io_service)
 {

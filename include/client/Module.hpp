@@ -14,7 +14,7 @@ class   Module
 public:
     Module(std::string filenameListener);
     Module();
-    Module(Module copy);
+    //Module(Module &copy);
     void    setFilenameListener(std::string filenameListener);
     void    run();
 

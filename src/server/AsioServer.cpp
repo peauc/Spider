@@ -5,7 +5,7 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
-#include "AsioServer.hpp"
+#include "server/AsioServer.hpp"
 
 
 AsioServer::AsioServer() :
