@@ -47,7 +47,7 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 int KeyboardListener::run()
 {
 	std::cout << "KeyboardListener::run()" << std::endl;
-	_dll = LoadLibrary(L"KBHook.dll");
+	_dll = LoadLibrary("libKBHook.dll");
 	if (!_dll)
 	{
 		std::cerr << "Could not load the dynamic library KBHook" << std::endl;
