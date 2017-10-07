@@ -16,6 +16,7 @@ class IListener
 public:
 	virtual int run() = 0;
 	virtual int stop() = 0;
+	virtual std::string getFilenameOutput = 0;
 };
 
 #endif /* !ILISTENER_HH_ */

@@ -44,5 +44,6 @@ int main()
     destroy(obj);
     std::cout << "objet detruit" << std::endl;
     getchar();
+    FreeLibrary(hGetProcIDDLL);
     return 0;
 }
