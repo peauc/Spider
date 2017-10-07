@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.9)
 project(cpp_spider)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -35,3 +35,21 @@ target_link_libraries(cpp_spider_client
         ${Boost_SYSTEM_LIBRARY}
         ${Boost_SERIALIZATION_LIBRARY}
         )
+
+cmake_minimum_required(VERSION 3.9)
+project(KBHook)
+
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(include/dll)
+set(SOURCE_HKBHOOK_FILES src/dll/IziHook.cpp include/dll/IziHook.hh src/dll/launchDLL.cpp)
+add_library(KBHook SHARED ${SOURCE_HKBHOOK_FILES})
+
+project(KeyboardListener)
+set(SOURCE_KEYBOARDLISTENER_FILES src/dll/KeyboardListener.cpp include/dll/KeyboardListener.hh)
+add_library(KeyboardListener SHARED ${SOURCE_KEYBOARDLISTENER_FILES})
+
+project(laucherDLL)
+set(CMAKE_CXX_STANDARD 14)
+set(SOURCE_LAUNCHERDLL_FILES src/dll/launchDLL.cpp)
+add_executable(launcherDLL ${SOURCE_LAUNCHERDLL_FILES})

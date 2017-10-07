@@ -4,9 +4,15 @@
 
 #include "client/Module.hpp"
 
-Module::Module() {}
+Module::Module()
+{
+    LoadLibrary()
+}
 
-Module::~Module() {}
+Module::~Module()
+{
+
+}
 
 char    Module::getOpcode()
 {

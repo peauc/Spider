@@ -10,12 +10,23 @@
 
 class   Module
 {
+    std::string _filenameListener;
 public:
+    Module(std::string filenameListener);
     Module();
+    Module(Module copy);
+    void    setFilenameListener(std::string filenameListener);
+    void    run();
+
     virtual ~Module();
-    char    getOpcode();
-    void    addNextData(t_paquet *);
+    char    getOpcode(); // identifier module
+    void    addNextData(t_paquet *); //
     size_t  getDataSize();
+    std::string getFilename();
+
+    Module& operator=(Module copy);
 };
+
+
 
 #endif //MODULE_HPP

