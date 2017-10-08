@@ -5,7 +5,6 @@
 #ifndef MODULE_HPP
 #define MODULE_HPP
 
-# include <glob.h>
 # include "client/SpiderClient.hpp"
 
 class   Module
@@ -20,8 +19,7 @@ public:
 
     virtual ~Module();
     char    getOpcode(); // identifier module
-    void    addNextData(t_paquet *); //
-    size_t  getDataSize();
+    void    getDatas(t_paquet *);
     std::string getFilename();
 
     Module& operator=(Module copy);
