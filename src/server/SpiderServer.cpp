@@ -48,7 +48,7 @@ void SpiderServer::readFromTerminal(const boost::system::error_code &error)
 
 void SpiderServer::parseInputRequest(const std::string &string)
 {
-	std::cout << __FUNCTION__ << " string : " << string << std::endl;
+	std::cout << __FUNCTION__ << " string : " << string;
 	//for (auto it = _opCodeDuet.begin(); it < _opCodeDuet.end(); it++)
 	{
 		//TODO: Get unserialisation to find the opcode
