@@ -5,6 +5,9 @@
 #ifndef CPP_SPIDER_ASIOSERVER_HPP
 #define CPP_SPIDER_ASIOSERVER_HPP
 
+#define NUMBER_OF_POLL_PER_TICK 3
+
+#include "ClientObjectManager.hpp"
 #include "server/AServer.hpp"
 #include "server/ServerClientObject.hpp"
 
@@ -20,14 +23,16 @@ public:
 
 	boost::asio::io_service &getIoService();
 	bool shouldRun();
-	void handle_accept(ServerClientObject::shared_ptr new_client, const boost::system::error_code &error);
-	void tick();
-	bool sendMessageToClient(ServerClientObject &client, std::string message);
-	bool sendMessageToEveryClient(std::string message);
+	void sendToEveryClient(const std::string &string);
+	void handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error);
+	virtual void tick();
+
+
 
 private:
 	void start_accept();
-	std::vector<ServerClientObject::shared_ptr> clientList;
+
+	ClientObjectManager     _clientManager;
 	bool                    _shouldRun;
 	boost::asio::io_service _ioService;
 	boost::asio::ip::tcp::acceptor _acceptor;

@@ -23,11 +23,13 @@ class KeyboardListener : public IListener
 {
 private:
 	HINSTANCE _dll;
-
+	std::string _FilenameOutput;
 public:
+	KeyboardListener();
+
 	virtual int run();
 	virtual int stop();
-	virtual void DoSomething();
+	virtual std::string getFilenameOutput = 0;
 };
 
 #endif

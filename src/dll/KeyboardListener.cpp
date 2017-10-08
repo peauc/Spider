@@ -44,6 +44,11 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 	return TRUE;
 }
 
+KeyboardListener::KeyboardListener()
+{
+	_FilenameOutput = "key.txt";
+}
+
 int KeyboardListener::run()
 {
 	std::cout << "KeyboardListener::run()" << std::endl;
@@ -66,6 +71,11 @@ int KeyboardListener::stop()
 	return (0);
 }
 
+std::string KeyboardListener::getFilenameOutput()
+{
+	return (_FilenameOutput);
+}
+
 extern "C" __declspec(dllexport) KeyboardListener *create()
 {
 	return (new KeyboardListener);
@@ -74,9 +84,4 @@ extern "C" __declspec(dllexport) KeyboardListener *create()
 extern "C" __declspec(dllexport) void destroy(KeyboardListener *obj)
 {
 	delete obj;
-}
-
-void KeyboardListener::DoSomething()
-{
-	std::cout << "hello" << std::endl;
 }

