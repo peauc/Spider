@@ -16,7 +16,7 @@
 
 #include "KeyboardListener.hh"
 
-typedef int (*f_func)(std::string&);
+typedef int (*f_func)(std::list<std::string>&);
 
 //#pragma comment(lib, "user32.lib")
 
@@ -78,6 +78,7 @@ int KeyboardListener::getElements(std::list<std::string>& list)
 	f_func getElem;
 
 	getElem = (f_func)(GetProcAddress(_dll, "getElements"));
+	getElem(list);
 	return (0);
 }
 std::string KeyboardListener::getFilenameOutput()

@@ -4,43 +4,44 @@
 
 #include <windows.h>
 #include <iostream>
-#include <fstream>
 #include <time.h>
 #include <list>
 #include <thread>
-#include "../include/Mouse.h"
-#include <cstring>
+#include <string>
+#include <mutex>
+
+#include "Mouse.h"
 
 std::list<std::string> list;
 bool toerase = false;
-HANDLE      mutex;
+//HANDLE      mutex;
 static bool cont;
 static bool cont2;
+std::mutex mutex;
+std::ofstream   fichier;
 
-int getElements(std::list<std::string>& list, std::ofstream& fichier)
+int getElementsA(std::list<std::string>& list, std::ofstream& fichier)
 {
     std::ifstream temp;
-    DWORD result;
+   // DWORD result;
 
-    result = WaitForSingleObject(mutex, INFINITE);
-    temp.open("../mouse.h");
-    if (result == WAIT_OBJECT_0)
-    {
-        std::string buffer;
-        while (std::getline(temp, buffer))
-            list.push_back(buffer);
-        toerase = true;
-        temp.close();
-        if (!ReleaseMutex(mutex))
-        {
-        }
-    }
-    if (toerase) {
-        fichier.close();
-        remove("../mouse.txt");
-        fichier.open("../mouse.txt");
-    }
-    return (0);
+    temp.open("mouse.txt");
+	mutex.lock();
+		std::string buffer;
+		while (getline(temp, buffer))
+			list.push_back(buffer);
+		toerase = true;
+		temp.close();
+		fichier.close();
+		remove("mouse.txt");
+		fichier.open("mouse.txt");
+		mutex.unlock();
+	return (0);
+}
+
+int MouseClickListener::getElements(std::list<std::string>& list)
+{
+	return (getElementsA(list, fichier));
 }
 
 int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
@@ -60,8 +61,6 @@ return TRUE;
 
 MouseClickListener::MouseClickListener() {
     cont = true;
-    fichier.open("../mouse.txt");
-
 }
 
 MouseClickListener::~MouseClickListener()
@@ -69,37 +68,42 @@ MouseClickListener::~MouseClickListener()
     fichier.close();
 }
 
-void        write_infos(struct s_mouseData mouse, std::ofstream &fichier)
+void        write_infos(struct s_mouseData mouse)
 {
     Sleep(30);
-    if (fichier)
+    if (fichier.is_open())
     {
+		
         fichier << mouse.timestamp << "/" << mouse.x << "/" << mouse.y << "/" << mouse.key_code << std::endl;
         std::cout << mouse.timestamp << "/" << mouse.x << "/" << mouse.y << "/" << mouse.key_code << std::endl;
-
     }
     else
         printf("File could not be opened\n");
 }
 
-void GetMousePos(s_mouseData& mouse, std::ofstream& fichier)
+void GetMousePos()
 {
     POINT   aPoint;
     time_t rawtime;
+	s_mouseData     mouse;
+	SHORT r;
 
+	std::cout << "UP" << std::endl;
     //Check the mouse left button is pressed or not
-    if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+    if ((r = GetKeyState(VK_LBUTTON) & 0x80) != 0)
     {
+		std::cout << "CLICK" << std::endl;
         GetCursorPos(&aPoint);
         mouse.x = aPoint.x;
         mouse.y = aPoint.y;
         time ( &rawtime );
         mouse.timestamp = rawtime;
         mouse.key_code = 1;
-        write_infos(mouse, fichier);
+        write_infos(mouse);
+
     }
         //Check the mouse right button is pressed or not
-    else if ((GetKeyState(VK_RBUTTON) & 0x100) != 0)
+    else if ((r = GetKeyState(VK_RBUTTON) & 0x80) != 0)
     {
         GetCursorPos(&aPoint);
         mouse.x = aPoint.x;
@@ -107,25 +111,63 @@ void GetMousePos(s_mouseData& mouse, std::ofstream& fichier)
         time ( &rawtime );
         mouse.timestamp = rawtime;
         mouse.key_code = 2;
-        write_infos(mouse, fichier);
-    }
+        write_infos(mouse);
+		std::cout << "CLICK" << std::endl;
+	}
+	std::cout << "r = " << (r & 0x80) << std::endl;
 }
 
-int         runThread(s_mouseData& mouse, std::ofstream& fichier)
+std::string GetLastErrorStdStr()
 {
+	DWORD error = GetLastError();
+	if (error)
+	{
+		LPVOID lpMsgBuf;
+		DWORD bufLen = FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			error,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR)&lpMsgBuf,
+			0, NULL);
+		if (bufLen)
+		{
+			LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
+			std::string result(lpMsgStr, lpMsgStr + bufLen);
+
+			LocalFree(lpMsgBuf);
+
+			return result;
+		}
+	}
+	return std::string();
+}
+
+int         runThread()
+{
+	fichier.open("mouse.txt");
     std::cout << "Run Thread " << std::endl;
-    while(cont) {
-        GetMousePos(mouse, fichier);
-        Sleep(100);
+
+    while(cont) 
+	{
+		//std::cout << "INFINITE " << std::endl;
+		mutex.lock();
+		std::cout << "result" << std::endl;
+		GetMousePos();
+		mutex.unlock();
+		Sleep(100);
     }
+	fichier.close();
     return (0);
 }
 
 int MouseClickListener::run()
 {
-
     CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&runThread, 0, 0, 0);
-    return (0);
+	//runThread();
+	return (0);
 }
 
 int         MouseClickListener::stop()
@@ -146,5 +188,5 @@ extern "C" __declspec(dllexport) void destroy(MouseClickListener *obj)
 
 std::string MouseClickListener::getFilenameOutput()
 {
-    return ("../mouse.txt");
+    return ("mouse.txt");
 }
