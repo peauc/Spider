@@ -18,13 +18,15 @@ public:
 	boost::asio::ip::tcp::socket &getSocket();
 	void tryReading();
 
-
+	void write(const std::string &string);
+	std::string   getInputBuffer();
 	void start();
 private:
 	explicit ServerClientObject(boost::asio::io_service &io_service) : _socket(io_service) {}
 	void handle_write(const boost::system::error_code & /*error*/, size_t /*bytes_transferred*/);
 	void readContentHandler(const boost::system::error_code &errors);
 
+	std::ostringstream           _inputBuffer;
 	boost::asio::streambuf      _buffer;
 	bool                        hadRead;
 	boost::asio::ip::tcp::socket _socket;

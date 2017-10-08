@@ -5,10 +5,12 @@
 #ifndef CPP_SPIDER_ASIOCLIENT_HPP
 #define CPP_SPIDER_ASIOCLIENT_HPP
 
-#include "client/AClient.hpp"
 #include <boost/asio.hpp>
 #include <iostream>
-#include "client/Module.h"
+#include "client/AClient.hpp"
+#include "client/Command.hpp"
+
+class Module;
 
 class AsioClient : public AClient {
 public:
@@ -23,7 +25,7 @@ public:
   unsigned short			port;
   boost::asio::ip::tcp::socket 		socket;
   boost::asio::streambuf 		answer;
-  //std::map<char, Module>		modules;
+  std::map<char, Module>		modules;
 };
 
 #endif //CPP_SPIDER_ASIOCLIENT_HPP
