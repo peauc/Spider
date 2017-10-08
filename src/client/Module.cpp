@@ -2,6 +2,8 @@
 // Created by Thomas Lavigne & Axel Drozdzynski on 10/5/17.
 //
 
+#include <string.h>
+#include <client/SpiderClient.hpp>
 #include "client/Module.hpp"
 
 
@@ -57,12 +59,12 @@ void    Module::setOpcode(char op)
 void    Module::addNextData(t_paquet *data)
 {
     t_kbData *newData = new t_kbData;
+void    Module::getDatas(t_paquet *data) {
+    std::list<std::string>  c_datas; // AXEL = ta fonction
 
-    newData->timestamp = 193;
-    newData->key_code = 'A';
-    newData->next = data->kbData;
-    data->kbData = newData;
-}
+    for (std::list<std::string>::iterator it = c_datas.begin(); it != c_datas.end(); it++) {
+        std::list<std::string>  c_data;
+        std::string             pch;
 
 std::string Module::getFilenameOutput()
 {
@@ -77,6 +79,41 @@ void Module::run()
 size_t  Module::getDataSize()
 {
     return (sizeof(t_kbData));
+        pch = std::strtok((char *)it->c_str(), ":");
+        c_data.push_back(pch);
+        while (pch != NULL)
+        {
+            pch = std::strtok(NULL, ":");
+            c_data.push_back(pch);
+        }
+        if (isKB) {
+            t_kbData    *kb = new t_kbData;
+
+            kb->timestamp = std::stoul(c_data.front().c_str());
+            c_data.pop_front();
+            kb->key_code = c_data.front();
+            c_data.pop_front();
+            kb->status = atoi(c_data.front());
+            c_data.pop_front();
+            kb->next = data->kbdata;
+            data->kbdata = kb;
+        } else if (isMouse) {
+            t_mouseData *mouse = new t_mouseData;
+
+            mouse->timestamp = std::stoul(c_data.front().c_str());
+            c_data.pop_front();
+            mouse->key_code = atoi(c_data.front().c_str());
+            c_data.pop_front();
+            mouse->x = atoi(c_data.front().c_str());
+            c_data.pop_front();
+            mouse->y = atoi(c_data.front().c_str());
+            c_data.pop_front();
+            mouse->status = atoi(c_data.front());
+            c_data.pop_front();
+            mouse->next = data->msdata;
+            data->msdata = mouse;
+        }
+    }
 }
 
 int    Module::loadListener()

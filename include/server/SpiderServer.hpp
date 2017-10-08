@@ -5,7 +5,7 @@
 #ifndef CPP_SPIDER_KEYLOGGERSERVER_HPP
 #define CPP_SPIDER_KEYLOGGERSERVER_HPP
 
-#include "AsioServer.hpp"
+#include "server/AsioServer.hpp"
 
 class SpiderServer : public AsioServer {
 public:

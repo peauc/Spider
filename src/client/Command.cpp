@@ -18,12 +18,12 @@ bool                        Command::process(std::map<char, Module> modules, std
     boost::archive::text_oarchive   ar(os);
     char                            code = received[0];
 
-    Module                          module; // = modules[code];
-    t_paquet                       *data = getMessageFormat(module);
-  ar & data;
-  if (data == NULL)
-    return false;
-  return true;
+    Module                          module = modules[code];
+    t_paquet                        *data = getMessageFormat(module);
+    ar & data;
+    if (data == NULL)
+        return false;
+    return true;
 }
 
 /*
@@ -31,17 +31,13 @@ bool                        Command::process(std::map<char, Module> modules, std
  */
 t_paquet                    *Command::getMessageFormat(Module module)
 {
-    size_t      dataMax = 512 / module.getDataSize();
     t_paquet    *data = new t_paquet;
 
-    data->kbData = NULL;
-    data->opcode = 0;
+    data->kbdata = NULL;
+    data->msdata = NULL;
     data->opcode = module.getOpcode();
-  data->mouseData = NULL;
-    for (unsigned int i = dataMax; i < dataMax; i++) {
-        module.addNextData(data);
-    }
-  if (data->kbData == NULL && data->mouseData == NULL)
-    return NULL;
+    module.getDatas(data);
+    if (data->kbdata == NULL && data->msdata == NULL)
+        return NULL;
     return data;
 }

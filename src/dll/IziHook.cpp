@@ -15,7 +15,7 @@
 #include <fstream>
 
 
-#include "IziHook.hh"
+#include "dll/IziHook.hh"
 
 #pragma comment(lib, "user32.lib")
 

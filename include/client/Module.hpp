@@ -24,6 +24,10 @@ public:
     Module();
     Module(Module copy);
     Module& operator=(Module copy);
+    //Module(Module &copy);
+    void    setFilenameListener(std::string filenameListener);
+    void    run();
+
     virtual ~Module();
 
     /*Getters & Setters*/
@@ -38,6 +42,11 @@ public:
     int loadListener();
     int unloadListener();
     void load(char opcode);
+    char    getOpcode(); // identifier module
+    void    getDatas(t_paquet *);
+    std::string getFilename();
+
+    Module& operator=(Module copy);
 };
 
 
