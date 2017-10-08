@@ -18,6 +18,39 @@ typedef struct 	s_paquet
     std::string     id;
     t_kbData	    *kbdata;
     t_mouseData     *msdata;
+    std::string toString() {
+        std::string c_data(id);
+        t_kbData    *kbData = kbdata;
+        struct tm * timeinfo;
+
+        while (kbData != NULL) {
+            time_t      rawTime = kbData->timestamp;
+
+            c_data.append(" ");
+            timeinfo = localtime(&rawTime);
+            c_data.append(asctime(timeinfo));
+            c_data.append("\t");
+            c_data.append(kbData->key_code);
+            c_data.append(" ");
+            (kbData->status ? c_data.append("DOWN\n") : c_data.append("UP\n"));
+            kbData = kbData->next;
+        }
+        t_mouseData *msData = msdata;
+        while (msData != NULL) {
+            time_t      rawTime = msData->timestamp;
+
+            c_data.append(" ");
+            timeinfo = localtime(&rawTime);
+            c_data.append(asctime(timeinfo));
+            c_data.append("\t");
+            (kbData->key_code == 1 ? c_data.append("Right Click at [") : c_data.append("Left Click at ["));
+            c_data.append(std::to_string(msData->x));
+            c_data.append(";");
+            c_data.append(std::to_string(msData->y));
+            c_data.append("] DOWN\n");
+            msData = msData->next;
+        }
+    }
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
