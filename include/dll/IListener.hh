@@ -17,6 +17,7 @@ public:
 	virtual int run() = 0;
 	virtual int stop() = 0;
 	virtual std::string getFilenameOutput() = 0;
+	virtual int getElements(std::list<std::string>& list) = 0;
 };
 
 #endif /* !ILISTENER_HH_ */

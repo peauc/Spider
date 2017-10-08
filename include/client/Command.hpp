@@ -22,7 +22,7 @@ public:
     bool	process(std::map<char, Module>, std::string, boost::asio::streambuf &);
     std::string getUsername();
     std::string getHostname();
-    t_paquet	*getMessageFormat(Module);
+    t_paquet	*getMessageFormat(Module&);
 };
 
 #endif //COMMAND_HPP

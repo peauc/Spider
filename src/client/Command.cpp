@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <windows.h>
+//#include <windows.h>
 #include <Lmcons.h>
 #include "client/Command.hpp"
 
@@ -53,13 +53,13 @@ std::string                 Command::getHostname()
 /*
  * Créer la structure à renvoyer au serveur.
  */
-t_paquet                    *Command::getMessageFormat(Module module)
+t_paquet                    *Command::getMessageFormat(Module& module)
 {
     t_paquet    *data = new t_paquet;
 
     data->kbdata = NULL;
     data->msdata = NULL;
-    data->opcode = module.getOpcode();
+	data->opcode = 0x04;//module.getOpcode();
     data->id = this->getUsername();
     data->id += "@";
     data->id += this->getHostname();
