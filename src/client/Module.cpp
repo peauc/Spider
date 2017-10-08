@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include <client/SpiderClient.hpp>
-#include "client/Module.hpp"
+#include "Module.hpp"
 
 
 /* Constr & Destr*/
@@ -163,5 +163,10 @@ void    Module::load(char opcode)
 {
     setOpcode(opcode);
     loadListener();
+}
+
+std::list<std::string> Module::getElements() const
+{
+
 }
 
