@@ -15,12 +15,13 @@ AsioServer::AsioServer() :
 
 AsioServer::~AsioServer()
 {
+	//TODO: stop
 	std::cout << "Destroying AsioServer" << std::endl;
 }
 
 bool AsioServer::stop()
 {
-	//TODO:: STOP SERVER;
+	_shouldRun = false;
 	return (true);
 }
 
@@ -30,27 +31,33 @@ bool AsioServer::start()
 	return (true);
 }
 
-void AsioServer::handle_accept(ServerClientObject::shared_ptr new_client, const boost::system::error_code &error)
+void AsioServer::tick()
+{
+	_ioService.poll();
+	start_accept();
+	_clientManager.readOnEveryClient();
+	_ioService.reset();
+}
+
+void AsioServer::handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error)
 {
 	std::cout << "handle accept\n";
 	if (!error)
 	{
-		new_client->start();
-		clientList.push_back(new_client);
-		start_accept();
+		_clientManager.addClient(newClient);
+		newClient->start();
 	} else
 	{
-		std::cerr << error.message() << std::endl;
+		std::cerr << __FUNCTION__ << " " << error.message() << std::endl;
 	}
 }
 
 void AsioServer::start_accept()
 {
-	std::cout << "Im starting to accept\n";
-	ServerClientObject::shared_ptr new_client = ServerClientObject::create(_acceptor.get_io_service());
+	auto newClient = ServerClientObject::create(_ioService);
 
-	_acceptor.async_accept(new_client->getSocket(),
-	                       boost::bind(&AsioServer::handle_accept, this, new_client, boost::asio::placeholders::error));
+	_acceptor.async_accept(newClient->getSocket(),
+	                       boost::bind(&AsioServer::handle_accept, this, newClient, boost::asio::placeholders::error));
 }
 
 
@@ -64,24 +71,3 @@ boost::asio::io_service &AsioServer::getIoService()
 	return (_ioService);
 }
 
-void AsioServer::tick()
-{
-	_ioService.poll_one();
-	if (clientList.size() > 0)
-	{
-		clientList.begin()->get()->tryReading();
-	}
-	_ioService.reset();
-}
-bool AsioServer::sendMessageToClient(ServerClientObject &client, std::string message)
-{
-	//auto it = std::find(clientList.begin(), clientList.end(), client);
-	//if (it != clientList.end())
-	{
-
-	}
-}
-bool AsioServer::sendMessageToEveryClient(std::string message)
-{
-	return false;
-}
