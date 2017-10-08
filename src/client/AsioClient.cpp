@@ -60,6 +60,7 @@ void 		AsioClient::try_send(const std::string host)
   this->init_time(&delays);
   while (1) {
     /* async_read */
+    //todo::async_read
     time(&delays.t);
     if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 60) {
       delays.old_sec = delays.sec;
