@@ -11,7 +11,6 @@
 # include <boost/archive/text_oarchive.hpp>
 # include "client/Module.hpp"
 
-class Module;
 typedef struct s_paquet t_paquet;
 
 class   Command
@@ -22,7 +21,7 @@ public:
     bool	process(std::map<char, Module>, std::string, boost::asio::streambuf &);
     std::string getUsername();
     std::string getHostname();
-    t_paquet	*getMessageFormat(Module);
+    t_paquet	*getMessageFormat(Module&);
 };
 
 #endif //COMMAND_HPP

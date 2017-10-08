@@ -3,8 +3,9 @@
 //
 
 #include <string.h>
-#include <client/SpiderClient.hpp>
-#include "Module.hpp"
+#include <iostream>
+#include "client/SpiderClient.hpp"
+#include "client/Module.hpp"
 
 
 /* Constr & Destr*/
@@ -18,11 +19,11 @@ Module::Module(char opcode, const std::string& filenameListener)
     this->_filenameListener = filenameListener;
 }
 
-Module::Module(Module& copy)
+/*Module::Module(Module& copy)
 {
     this->_filenameListener = copy.getFilenameListener();
     this->_opcode = copy.getOpcode();
-}
+}*/
 
 Module& Module::operator=(Module& mod)
 {
@@ -92,7 +93,7 @@ void    Module::getDatas(t_paquet *data) {
             c_data.pop_front();
             kb->key_code = c_data.front();
             c_data.pop_front();
-            kb->status = atoi(c_data.front());
+            kb->status = atoi(c_data.front().c_str());
             c_data.pop_front();
             kb->next = data->kbdata;
             data->kbdata = kb;
@@ -107,7 +108,7 @@ void    Module::getDatas(t_paquet *data) {
             c_data.pop_front();
             mouse->y = atoi(c_data.front().c_str());
             c_data.pop_front();
-            mouse->status = atoi(c_data.front());
+            mouse->status = atoi(c_data.front().c_str());
             c_data.pop_front();
             mouse->next = data->msdata;
             data->msdata = mouse;
@@ -167,6 +168,8 @@ void    Module::load(char opcode)
 
 std::list<std::string> Module::getElements() const
 {
+	std::list<std::string>	list;
 
+	return list;
 }
 
