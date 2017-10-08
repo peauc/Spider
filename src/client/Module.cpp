@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include <iostream>
-#include "client/SpiderClient.hpp"
+#include <client/SpiderClient.hpp>
 #include "client/Module.hpp"
 
 
@@ -28,7 +28,7 @@ Module::Module(char opcode, const std::string& filenameListener)
 Module& Module::operator=(Module& mod)
 {
     mod.setOpcode(this->getOpcode());
-    mod.setFilenameListener(this->getFilenameListener());
+    //mod.setFilenameListener(this->getFilenameListener());
     return (*this);
 }
 
@@ -38,7 +38,7 @@ Module::~Module()
 }
 
 /*Getters & Setters*/
-char    Module::getOpcode() const
+char    Module::getOpcode()
 {
     return _opcode;
 }
@@ -58,8 +58,8 @@ void    Module::setOpcode(char op)
 
 const std::string& Module::getFilenameOutput() const
 {
-	return ("");
-    //return (_listener->getFilenameOutput());
+	//return ("");
+    return (_listener->getFilenameOutput());
 }
 
 const std::string& Module::getFilenameListener() const
@@ -168,8 +168,7 @@ void    Module::load(char opcode)
 
 std::list<std::string> Module::getElements() const
 {
-	std::list<std::string>	list;
-
-	return list;
+	std::list<std::string> tmp;
+	return (tmp);
 }
 
