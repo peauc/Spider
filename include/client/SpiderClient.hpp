@@ -7,7 +7,6 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/asio.hpp>
-#include "client/AsioClient.hpp"
 
 typedef struct s_kbData t_kbData;
 typedef struct s_mouseData t_mouseData;
@@ -16,14 +15,15 @@ typedef struct s_mouseData t_mouseData;
 typedef struct 	s_paquet
 {
     char 		    opcode;
-    t_kbData	    *kbData;
-    t_mouseData     *mouseData;
+    std::string     id;
+    t_kbData	    *kbdata;
+    t_mouseData     *msdata;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
         ar & opcode;
-        ar & kbData;
-        ar & mouseData;
+        ar & kbdata;
+        ar & msdata;
     }
 }				t_paquet;
 
@@ -31,23 +31,26 @@ typedef struct 	s_paquet
 struct  s_kbData
 {
     unsigned int    timestamp;
-    int             key_code;
+    std::string     key_code;
+    int             status;
     struct s_kbData *next;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
         ar & timestamp;
         ar & key_code;
+        ar & status;
         ar & next;
     }
 };
 
 struct  s_mouseData
 {
-    int         timestamp;
+    unsigned int        timestamp;
     int         key_code;
     int         x;
     int         y;
+    int         status;
     struct s_mouseData  *next;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
@@ -56,6 +59,7 @@ struct  s_mouseData
         ar & key_code;
         ar & x;
         ar & y;
+        ar & status;
         ar & next;
     }
 };
