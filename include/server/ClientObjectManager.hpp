@@ -17,6 +17,7 @@ public:
 
 	void printEveryClientBuffer();
 	void readOnEveryClient();
+	std::vector<std::string>    getEveryClientInput();
 	bool sendMessageToClient(ServerClientObject::shared_ptr &client, std::string message);
 	bool sendMessageToEveryClient(std::string message);
 private:

@@ -30,8 +30,13 @@ void ServerClientObject::start()
 	write("HelloClient\n");
 }
 
-void ServerClientObject::handle_write(const boost::system::error_code &error /*error*/, size_t bytes/*bytes_transferred*/)
+void ServerClientObject::handle_write(const boost::system::error_code &error, size_t bytes)
 {
+	if (error)
+	{
+		std::cerr << error << std::endl;
+	}
+	else
 	std::cout << "Has writen " << bytes << std::endl;
 }
 
@@ -65,3 +70,10 @@ std::string ServerClientObject::getInputBuffer()
 	string = _inputBuffer.str();
 	return (string);
 }
+
+void ServerClientObject::resetInputBuffer()
+{
+	_inputBuffer.clear();
+}
+
+

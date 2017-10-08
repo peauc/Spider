@@ -53,14 +53,8 @@ void SpiderServer::parseInputRequest(const std::string &string)
 	{
 		try
 		{
-			std::cout << __FUNCTION__ << " string : |" << string << "| vs |" << it->second << "|";
 			if (string.find(it->second) != std::string::npos)
-			{
-				std::cout << "sending opcode : " << it->first
-				          << " and with string of value : " << it->second;
 				sendToEveryClient(std::string(1, it->first));
-			}
-			//TODO: Get unserialisation to find the opcode
 		}
 		catch (std::exception &e)
 		{
