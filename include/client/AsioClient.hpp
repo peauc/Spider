@@ -38,7 +38,7 @@ public:
   unsigned short			port;
   boost::asio::ip::tcp::socket 		socket;
   boost::asio::streambuf 		answer;
-  std::map<char, Module>		modules;
+  std::map<char, Module *>		modules;
 
 
 };

