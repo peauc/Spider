@@ -15,14 +15,48 @@ typedef struct s_mouseData t_mouseData;
 typedef struct 	s_paquet
 {
     char 		    opcode;
-    t_kbData	    *kbData;
-    t_mouseData     *mouseData;
+    std::string     id;
+    t_kbData	    *kbdata;
+    t_mouseData     *msdata;
+    std::string toString() {
+        std::string c_data(id);
+        t_kbData    *kbData = kbdata;
+        struct tm * timeinfo;
+
+        while (kbData != NULL) {
+            time_t      rawTime = kbData->timestamp;
+
+            c_data.append(" ");
+            timeinfo = localtime(&rawTime);
+            c_data.append(asctime(timeinfo));
+            c_data.append("\t");
+            c_data.append(kbData->key_code);
+            c_data.append(" ");
+            (kbData->status ? c_data.append("DOWN\n") : c_data.append("UP\n"));
+            kbData = kbData->next;
+        }
+        t_mouseData *msData = msdata;
+        while (msData != NULL) {
+            time_t      rawTime = msData->timestamp;
+
+            c_data.append(" ");
+            timeinfo = localtime(&rawTime);
+            c_data.append(asctime(timeinfo));
+            c_data.append("\t");
+            (kbData->key_code == 1 ? c_data.append("Right Click at [") : c_data.append("Left Click at ["));
+            c_data.append(std::to_string(msData->x));
+            c_data.append(";");
+            c_data.append(std::to_string(msData->y));
+            c_data.append("] DOWN\n");
+            msData = msData->next;
+        }
+    }
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
         ar & opcode;
-        ar & kbData;
-        ar & mouseData;
+        ar & kbdata;
+        ar & msdata;
     }
 }				t_paquet;
 
@@ -30,23 +64,26 @@ typedef struct 	s_paquet
 struct  s_kbData
 {
     unsigned int    timestamp;
-    int             key_code;
+    std::string     key_code;
+    int             status;
     struct s_kbData *next;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
         ar & timestamp;
         ar & key_code;
+        ar & status;
         ar & next;
     }
 };
 
 struct  s_mouseData
 {
-    int         timestamp;
+    unsigned int        timestamp;
     int         key_code;
     int         x;
     int         y;
+    int         status;
     struct s_mouseData  *next;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
@@ -55,6 +92,7 @@ struct  s_mouseData
         ar & key_code;
         ar & x;
         ar & y;
+        ar & status;
         ar & next;
     }
 };

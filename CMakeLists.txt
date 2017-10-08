@@ -56,3 +56,6 @@ add_library(KeyboardListener SHARED ${SOURCE_KEYBOARDLISTENER_FILES})
 #project(laucherDLL)
 set(SOURCE_LAUNCHERDLL_FILES src/dll/launchDLL.cpp)
 add_executable(launcherDLL ${SOURCE_LAUNCHERDLL_FILES})
+
+set(SOURCE_MOUSECLICKLISTENER_FILES src/dll/MouseClickListener.cpp include/dll/Mouse.h)
+add_library(MouseClickListener SHARED ${SOURCE_MOUSECLICKLISTENER_FILES})
