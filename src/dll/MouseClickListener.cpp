@@ -6,32 +6,61 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
+#include <list>
 #include <thread>
-#include <stdlib.h>
-#include"Mouse.h"
+#include "../include/Mouse.h"
+#include <cstring>
 
+std::list<std::string> list;
+bool toerase = false;
+HANDLE      mutex;
 static bool cont;
 static bool cont2;
 
-int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
-    switch (fdwReason)
+int getElements(std::list<std::string>& list, std::ofstream& fichier)
+{
+    std::ifstream temp;
+    DWORD result;
+
+    result = WaitForSingleObject(mutex, INFINITE);
+    temp.open("../mouse.h");
+    if (result == WAIT_OBJECT_0)
     {
-        case DLL_PROCESS_ATTACH:
-            std::cout << "Processe attached" << std::endl;
-            cont2 = true;
-            break;
-        case DLL_PROCESS_DETACH:
-            cont2 = false;
-            break;
+        std::string buffer;
+        while (std::getline(temp, buffer))
+            list.push_back(buffer);
+        toerase = true;
+        temp.close();
+        if (!ReleaseMutex(mutex))
+        {
+        }
     }
-    return TRUE;
+    if (toerase) {
+        fichier.close();
+        remove("../mouse.txt");
+        fichier.open("../mouse.txt");
+    }
+    return (0);
+}
+
+int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
+switch (fdwReason)
+{
+case DLL_PROCESS_ATTACH:
+        std::cout << "Processe attached" << std::endl;
+cont2 = true;
+break;
+case DLL_PROCESS_DETACH:
+        cont2 = false;
+break;
+}
+return TRUE;
 }
 
 
 MouseClickListener::MouseClickListener() {
     cont = true;
-    std::cout << "Hello, World!" << std::endl;
-    fichier.open("../test.txt");
+    fichier.open("../mouse.txt");
 
 }
 
@@ -40,41 +69,13 @@ MouseClickListener::~MouseClickListener()
     fichier.close();
 }
 
-void GetMousePos(s_mouseData&, std::ofstream&);
-
-static int         runThread(s_mouseData& mouse,std::ofstream& fichier)
-{
-    std::cout << "Run Thread "
-         << "cont=" << cont << "cont2=" << cont2 << std::endl;
-    while(cont) {
-        std::cout << "wesh" << std::endl;
-		GetMousePos(mouse, fichier);
-        Sleep(100);
-    }
-    std::cout << "sortie boucle" << std::endl;
-	return (0);
-}
-
-int MouseClickListener::run()
-{
-    std::cout << "run" << std::endl;
-    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&runThread, 0, 0, 0);
-	return (0);
-}
-
-int         MouseClickListener::stop()
-{
-    cont = false;
-	return (0);
-}
-
 void        write_infos(struct s_mouseData mouse, std::ofstream &fichier)
 {
     Sleep(30);
     if (fichier)
     {
-        fichier << mouse.timestamp << ":" << mouse.x << ":" << mouse.y << ":" << mouse.key_code << std::endl;
-        std::cout << mouse.timestamp << ":" << mouse.x << ":" << mouse.y << ":" << mouse.key_code << std::endl;
+        fichier << mouse.timestamp << "/" << mouse.x << "/" << mouse.y << "/" << mouse.key_code << std::endl;
+        std::cout << mouse.timestamp << "/" << mouse.x << "/" << mouse.y << "/" << mouse.key_code << std::endl;
 
     }
     else
@@ -87,29 +88,51 @@ void GetMousePos(s_mouseData& mouse, std::ofstream& fichier)
     time_t rawtime;
 
     //Check the mouse left button is pressed or not
-        if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-        {
-            GetCursorPos(&aPoint);
-            mouse.x = aPoint.x;
-            mouse.y = aPoint.y;
-            time ( &rawtime );
-            mouse.timestamp = rawtime;
-            mouse.key_code = 1;
-            write_infos(mouse, fichier);
-        }
+    if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+    {
+        GetCursorPos(&aPoint);
+        mouse.x = aPoint.x;
+        mouse.y = aPoint.y;
+        time ( &rawtime );
+        mouse.timestamp = rawtime;
+        mouse.key_code = 1;
+        write_infos(mouse, fichier);
+    }
         //Check the mouse right button is pressed or not
-        else if ((GetKeyState(VK_RBUTTON) & 0x100) != 0)
-        {
-            GetCursorPos(&aPoint);
-            mouse.x = aPoint.x;
-            mouse.y = aPoint.y;
-            time ( &rawtime );
-            mouse.timestamp = rawtime;
-            mouse.key_code = 2;
-            write_infos(mouse, fichier);
-        }
+    else if ((GetKeyState(VK_RBUTTON) & 0x100) != 0)
+    {
+        GetCursorPos(&aPoint);
+        mouse.x = aPoint.x;
+        mouse.y = aPoint.y;
+        time ( &rawtime );
+        mouse.timestamp = rawtime;
+        mouse.key_code = 2;
+        write_infos(mouse, fichier);
+    }
 }
 
+int         runThread(s_mouseData& mouse, std::ofstream& fichier)
+{
+    std::cout << "Run Thread " << std::endl;
+    while(cont) {
+        GetMousePos(mouse, fichier);
+        Sleep(100);
+    }
+    return (0);
+}
+
+int MouseClickListener::run()
+{
+
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&runThread, 0, 0, 0);
+    return (0);
+}
+
+int         MouseClickListener::stop()
+{
+    cont = false;
+    return (0);
+}
 
 extern "C" __declspec(dllexport) MouseClickListener *create()
 {
@@ -123,5 +146,5 @@ extern "C" __declspec(dllexport) void destroy(MouseClickListener *obj)
 
 std::string MouseClickListener::getFilenameOutput()
 {
-	return ("../test.txt");
+    return ("../mouse.txt");
 }
