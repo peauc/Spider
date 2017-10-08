@@ -3,6 +3,11 @@ project(cpp_spider)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_VERBOSE_MAKEFILE 1)
+if (WIN32)
+set(BOOST_ROOT "C:\\boost_1_65_1")
+set(BOOST_LIBRARYDIR ${BOOST_ROOT}/stage/lib/)
+endif (WIN32)
+set(Boost_USE_STATIC_LIBS        ON)
 find_package(Boost REQUIRED COMPONENTS system thread filesystem regex serialization)
 include_directories( ${Boost_INCLUDE_DIRS} )
 
