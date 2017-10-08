@@ -8,19 +8,6 @@
 #include "client/AsioClient.hpp"
 
 
-bool	AsioClient::ping(boost::asio::ip::tcp::endpoint endpoint, boost::system::error_code err)
-{
- /* std::string message("ping");
-  boost::array<char, 2048> buf;
-
-  std::copy(message.begin(), message.end(), buf.begin());
-  boost::asio::async_write(socket, boost::asio::buffer(buf),
-			   boost::bind(&AsioClient::handle_read_state,
-				       this, boost::asio::placeholders::error));*/
-  if (connect(endpoint, err))
-    return true;
-}
-
 void 	AsioClient::init_time(t_delays *delays)
 {
   delays->time_stru.tm_hour = 0;
@@ -66,39 +53,29 @@ void 		AsioClient::try_send(const std::string host)
   std::string 			message;
   boost::system::error_code 	err;
   boost::asio::streambuf	f_buf;
-  boost::system::error_code 	error;
   Command			command;
   t_delays			delays;
-  t_ping			_ping;
 
   this->connect(endpoint, err);
   this->init_time(&delays);
   while (1) {
-    boost::asio::async_read(socket, answer,
-			    boost::asio::transfer_at_least(1),
-			    boost::bind(&AsioClient::handle_read_body, this,
-					boost::asio::placeholders::error));
-    message = answer_to_string(answer);
-    if (!message.empty())
-      std::cout << message << std::endl;
-    if (this->stop(message))
-      return ;
+    /* async_read */
+    //todo::async_read
     time(&delays.t);
-    /*if (((_ping.sec = difftime(delays.t, mktime(&delays.time_stru))) - _ping.old_sec) > 5) {
-      _ping.old_sec = _ping.sec;
-      if (ping(endpoint, err)) {*/
-	if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 3) {
-	  delays.old_sec = delays.sec;
-	  if (command.process(this->modules, "!", f_buf)) {
-	    boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
-				     boost::bind(&AsioClient::handle_read_state,
-						 this, boost::asio::placeholders::error));
-	  }
-	}
-     // }
-    //}
-/*	else
-	  error();*/
+    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 60) {
+      delays.old_sec = delays.sec;
+      if (command.process(this->modules, "0x04", f_buf)) {
+	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
+				 boost::bind(&AsioClient::handle_read_state,
+					     this, boost::asio::placeholders::error));
+
+      }
+      if (command.process(this->modules, "0x05", f_buf)) {
+	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
+				 boost::bind(&AsioClient::handle_read_state,
+					     this, boost::asio::placeholders::error));
+      }
+    }
   }
   this->socket.close();
 }

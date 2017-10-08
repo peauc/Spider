@@ -11,7 +11,7 @@
 int main()
 {
     std::cout << "Hello World" << std::endl;
-    HINSTANCE hGetProcIDDLL = LoadLibrary("libKeyboardListener.dll");
+    HINSTANCE hGetProcIDDLL = LoadLibrary("KeyboardListener.dll");
 
     if (!hGetProcIDDLL)
     {

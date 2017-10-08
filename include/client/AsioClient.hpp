@@ -23,11 +23,6 @@ public:
     double			old_sec;
   }				t_delays;
 
-  typedef struct 		s_ping
-  {
-    double 			sec;
-    double 			old_sec;
-  }				t_ping;
 	AsioClient(boost::asio::io_service &, unsigned short);
 	~AsioClient();
   void	try_send(const std::string);
