@@ -23,9 +23,9 @@ public:
 
 	boost::asio::io_service &getIoService();
 	bool shouldRun();
-
+	void sendToEveryClient(const std::string &string);
 	void handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error);
-	void tick();
+	virtual void tick();
 
 
 
