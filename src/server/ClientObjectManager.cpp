@@ -35,6 +35,7 @@ void ClientObjectManager::readOnEveryClient()
 		it++;
 	}
 }
+
 void ClientObjectManager::printEveryClientBuffer()
 {
 	for (auto it = _clientList.begin(); it < _clientList.end(); it++)
@@ -62,5 +63,17 @@ ClientObjectManager::ClientObjectManager()
 ClientObjectManager::~ClientObjectManager()
 {
 
+}
+
+std::vector<std::string> ClientObjectManager::getEveryClientInput()
+{
+	std::vector<std::string>   clientInputList;
+
+	for (auto it = _clientList.begin(); it < _clientList.end(); it++)
+	{
+		clientInputList.push_back(it->get()->getInputBuffer());
+		it->get()->resetInputBuffer();
+	}
+	return (clientInputList);
 }
 

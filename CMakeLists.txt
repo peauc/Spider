@@ -31,6 +31,7 @@ target_link_libraries(cpp_spider_server
         ${Boost_FILESYSTEM_LIBRARY}
         ${Boost_THREAD_LIBRARY}
         ${Boost_SYSTEM_LIBRARY}
+        ${Boost_SERIALIZATION_LIBRARY}
         )
 target_link_libraries(cpp_spider_client
         ${Boost_LOG_SETUP_LIBRARY}

@@ -18,6 +18,7 @@ public:
 	boost::asio::ip::tcp::socket &getSocket();
 	void tryReading();
 
+	void resetInputBuffer();
 	void write(const std::string &string);
 	std::string   getInputBuffer();
 	void start();
@@ -28,7 +29,6 @@ private:
 
 	std::ostringstream           _inputBuffer;
 	boost::asio::streambuf      _buffer;
-	bool                        hadRead;
 	boost::asio::ip::tcp::socket _socket;
 	std::string m_message;
 };
