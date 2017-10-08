@@ -70,8 +70,13 @@ boost::asio::io_service &AsioServer::getIoService()
 {
 	return (_ioService);
 }
+
 void AsioServer::sendToEveryClient(const std::string &string)
 {
 	_clientManager.sendMessageToEveryClient(string);
+}
+ClientObjectManager &AsioServer::getClientObjectManager()
+{
+	return _clientManager;
 }
 

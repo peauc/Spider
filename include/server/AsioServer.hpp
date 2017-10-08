@@ -27,6 +27,8 @@ public:
 	void handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error);
 	virtual void tick();
 
+protected:
+	ClientObjectManager &getClientObjectManager();
 
 
 private:

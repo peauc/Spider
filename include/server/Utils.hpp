@@ -15,7 +15,8 @@
 class Utils
 {
 public:
-	static std::string makeStringFromAsioStream(boost::asio::streambuf &buffer) {
+	static std::string makeStringFromAsioStream(boost::asio::streambuf &buffer)
+	{
 		std::ostringstream ss;
 		std::string string;
 
@@ -25,13 +26,17 @@ public:
 	}
 
 
-void                                deserialize(t_paquet &data, boost::asio::streambuf &buf)
-{
-	std::istream is(&buf);
-	boost::archive::text_iarchive ar(is);
+	static t_paquet deserialize(boost::asio::streambuf &buf)
+	{
+		t_paquet data;
 
-	ar & data;
-}
+		std::istream is(&buf);
+		boost::archive::text_iarchive ar(is);
+
+		ar & data;
+
+		return (data);
+	}
 };
 
 #endif //CPP_SPIDER_UTILS_HPP

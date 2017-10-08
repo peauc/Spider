@@ -64,6 +64,22 @@ void SpiderServer::parseInputRequest(const std::string &string)
 }
 void SpiderServer::tick()
 {
+	std::vector<std::string>    clientInputList;
+
 	AsioServer::tick();
 	queueReadingFromTerminal();
+	clientInputList = getClientObjectManager().getEveryClientInput();
+	for (auto it = clientInputList.begin(); it < clientInputList.end(); it++)
+	{
+		if (!it->empty())
+		{
+			t_paquet    paquet;
+			boost::asio::streambuf sb;
+			std::iostream       ioStream(&sb);
+
+			ioStream << *it;
+			paquet = Utils::deserialize(sb);
+			std::cout << paquet.toString() << std::endl;
+		}
+	}
 }

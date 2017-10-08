@@ -29,7 +29,6 @@ private:
 
 	std::ostringstream           _inputBuffer;
 	boost::asio::streambuf      _buffer;
-	bool                        hadRead;
 	boost::asio::ip::tcp::socket _socket;
 	std::string m_message;
 };
