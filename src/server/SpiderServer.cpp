@@ -5,14 +5,15 @@
 #include "server/Utils.hpp"
 #include "server/SpiderServer.hpp"
 #include <iostream>
+#include <string>
 
 SpiderServer::SpiderServer() :
 		_stdIn(getIoService()),
-		_opCodeDuet (std::vector<std::pair<char, std::string>> { {0x04, "SendKb"}, {0x05, "SendMo"}, {0x06, "SendSs"} })
+		_opCodeDuet (std::vector<std::pair<char, std::string>> { {0x10, "SendKb"}, {0x11, "SendMo"}, {0x12, "SendSs"} })
 {
 	_stdIn.assign(STDIN_FILENO);
 	std::cout << "SpiderServer is launching" << std::endl;
-}
+	}
 
 SpiderServer::~SpiderServer()
 {
@@ -48,12 +49,23 @@ void SpiderServer::readFromTerminal(const boost::system::error_code &error)
 
 void SpiderServer::parseInputRequest(const std::string &string)
 {
-	std::cout << __FUNCTION__ << " string : " << string;
-	//for (auto it = _opCodeDuet.begin(); it < _opCodeDuet.end(); it++)
+	for (auto it = _opCodeDuet.begin(); it <= _opCodeDuet.end(); it++)
 	{
-		//TODO: Get unserialisation to find the opcode
-		//if ()
-		sendToEveryClient(string);
+		try
+		{
+			std::cout << __FUNCTION__ << " string : |" << string << "| vs |" << it->second << "|";
+			if (string.find(it->second) != std::string::npos)
+			{
+				std::cout << "sending opcode : " << it->first
+				          << " and with string of value : " << it->second;
+				sendToEveryClient(std::string(1, it->first));
+			}
+			//TODO: Get unserialisation to find the opcode
+		}
+		catch (std::exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
 	}
 }
 void SpiderServer::tick()

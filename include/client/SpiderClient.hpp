@@ -7,7 +7,6 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/asio.hpp>
-#include "client/AsioClient.hpp"
 
 typedef struct s_kbData t_kbData;
 typedef struct s_mouseData t_mouseData;
