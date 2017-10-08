@@ -16,13 +16,18 @@ boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
 	return (_socket);
 }
 
-void ServerClientObject::start()
+void ServerClientObject::write(const std::string &message)
 {
-	std::cout << "Starting a new client\n";
-	boost::asio::async_write(_socket, boost::asio::buffer("hello client\n"),
+	boost::asio::async_write(_socket, boost::asio::buffer(message),
 	                         boost::bind(&ServerClientObject::handle_write, shared_from_this(),
 	                                     boost::asio::placeholders::error,
 	                                     boost::asio::placeholders::bytes_transferred));
+}
+
+void ServerClientObject::start()
+{
+	std::cout << "Starting a new client\n";
+	write("HelloClient\n");
 }
 
 void ServerClientObject::handle_write(const boost::system::error_code &error /*error*/, size_t bytes/*bytes_transferred*/)
@@ -44,14 +49,13 @@ void ServerClientObject::readContentHandler(const boost::system::error_code &err
 	{
 		_inputBuffer << &_buffer;
 
-		//std::cout << &_buffer;
 		boost::asio::async_read(_socket, _buffer,
 		                        boost::asio::transfer_at_least(1),
 		                        boost::bind(&ServerClientObject::readContentHandler, this,
 		                                    boost::asio::placeholders::error));
 	} else if (err != boost::asio::error::eof)
 	{
-		std::cout << "Error: " << err << "\n";
+		std::cout << __FUNCTION__ <<" error: " << err << "\n";
 	}
 }
 std::string ServerClientObject::getInputBuffer()

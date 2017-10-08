@@ -7,6 +7,9 @@
 
 #include "AServer.hpp"
 #include "server/ServerClientObject.hpp"
+#include "ClientObjectManager.hpp"
+
+#define NUMBER_OF_POLL_PER_TICK 3
 
 class AsioServer : public AServer {
 public:
@@ -18,18 +21,19 @@ public:
 	AsioServer(AsioServer &server) = delete;
 	~AsioServer() override ;
 
-	void printEveryClientBuffer();
+
 	boost::asio::io_service &getIoService();
 	bool shouldRun();
-	void addWorkToReadEveryClient();
-	void handle_accept(ServerClientObject::shared_ptr new_client, const boost::system::error_code &error);
+
+	void handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error);
 	void tick();
-	bool sendMessageToClient(ServerClientObject &client, std::string message);
-	bool sendMessageToEveryClient(std::string message);
+
+
 
 private:
 	void start_accept();
-	std::vector<ServerClientObject::shared_ptr> clientList;
+
+	ClientObjectManager     _clientManager;
 	bool                    _shouldRun;
 	boost::asio::io_service _ioService;
 	boost::asio::ip::tcp::acceptor _acceptor;
