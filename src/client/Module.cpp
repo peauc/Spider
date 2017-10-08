@@ -74,7 +74,7 @@ void Module::run()
 }
 
 void    Module::getDatas(t_paquet *data) {
-	std::list<std::string>  c_datas = getElements();
+	std::list<std::string>  c_datas;
 
 	for (std::list<std::string>::iterator it = c_datas.begin(); it != c_datas.end(); it++) {
 		std::list<std::string>  c_data;
@@ -169,6 +169,8 @@ void    Module::load(char opcode)
 std::list<std::string> Module::getElements() const
 {
 	std::list<std::string> tmp;
+
+	_listener->getElements(tmp);
 	return (tmp);
 }
 

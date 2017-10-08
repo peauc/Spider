@@ -62,15 +62,15 @@ void 		AsioClient::try_send(const std::string host)
     /* async_read */
     //todo::async_read
     time(&delays.t);
-    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 60) {
+    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 5) {
       delays.old_sec = delays.sec;
-      if (command.process(this->modules, "0x04", f_buf)) {
+      if (command.process(this->modules, (char)0x04, f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
 
       }
-      if (command.process(this->modules, "0x05", f_buf)) {
+      if (command.process(this->modules, (char)0x05, f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
