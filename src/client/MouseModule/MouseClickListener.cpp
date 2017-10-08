@@ -8,6 +8,7 @@
 #include <fstream>
 #include <time.h>
 #include <thread>
+#include <stdlib.h>
 #include"../include/Mouse.h"
 
 static bool cont2;
