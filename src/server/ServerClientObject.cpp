@@ -60,7 +60,7 @@ void ServerClientObject::readContentHandler(const boost::system::error_code &err
 		                                    boost::asio::placeholders::error));
 	} else if (err != boost::asio::error::eof)
 	{
-		std::cout << __FUNCTION__ <<" error: " << err << "\n";
+		//std::cout << __FUNCTION__ <<" error: " << err << "\n";
 	}
 }
 std::string ServerClientObject::getInputBuffer()
@@ -74,6 +74,7 @@ std::string ServerClientObject::getInputBuffer()
 void ServerClientObject::resetInputBuffer()
 {
 	_inputBuffer.clear();
+	_inputBuffer.str("");
 }
 
 

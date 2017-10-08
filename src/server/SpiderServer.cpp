@@ -6,6 +6,7 @@
 #include "server/SpiderServer.hpp"
 #include <iostream>
 #include <string>
+#include <fstream>
 
 SpiderServer::SpiderServer() :
 		_stdIn(getIoService()),
@@ -71,15 +72,37 @@ void SpiderServer::tick()
 	clientInputList = getClientObjectManager().getEveryClientInput();
 	for (auto it = clientInputList.begin(); it < clientInputList.end(); it++)
 	{
-		if (!it->empty())
+		if (!((*it).empty()))
 		{
 			t_paquet    paquet;
 			boost::asio::streambuf sb;
 			std::iostream       ioStream(&sb);
 
 			ioStream << *it;
-			paquet = Utils::deserialize(sb);
-			std::cout << paquet.toString() << std::endl;
+			std::cout << *it << std::endl;
+			try {
+				Utils::deserialize(paquet, sb);
+				std::string finalString = Utils::PaquetToString(paquet);
+				std::string username = finalString.substr(0, finalString.find('\n'));
+				finalString = finalString.substr(finalString.find('\n') + 1, std::string::npos);
+				std::ofstream myFile;
+
+				myFile.open(username, std::ios::app);
+				if (myFile.is_open())
+				{
+					myFile << finalString;
+					myFile.close();
+				}
+				else
+				{
+					std::cerr << username << std::endl << finalString;
+				}
+
+			}
+			catch (std::exception &e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
 		}
 	}
 }
