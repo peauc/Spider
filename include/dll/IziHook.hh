@@ -28,7 +28,8 @@ extern "C"
 #endif
 
 
-	int __declspec(dllexport) install();
+	//int __declspec(dllexport) install();
+	int  __declspec(dllexport) getElements(std::list<std::string>& list);
 
 #ifdef __cplusplus
 }

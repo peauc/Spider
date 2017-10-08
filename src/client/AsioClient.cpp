@@ -6,8 +6,33 @@
 #include <iostream>
 #include <boost/array.hpp>
 #include "client/AsioClient.hpp"
-#include "client/Command.hpp"
 
+
+bool	AsioClient::ping(boost::asio::ip::tcp::endpoint endpoint, boost::system::error_code err)
+{
+ /* std::string message("ping");
+  boost::array<char, 2048> buf;
+
+  std::copy(message.begin(), message.end(), buf.begin());
+  boost::asio::async_write(socket, boost::asio::buffer(buf),
+			   boost::bind(&AsioClient::handle_read_state,
+				       this, boost::asio::placeholders::error));*/
+  if (connect(endpoint, err))
+    return true;
+}
+
+void 	AsioClient::init_time(t_delays *delays)
+{
+  delays->time_stru.tm_hour = 0;
+  delays->time_stru.tm_mday = 1;
+  delays->time_stru.tm_sec = 0;
+  delays->time_stru.tm_min = 0;
+  delays->time_stru.tm_year = 100;
+  delays->time_stru.tm_mon = 0;
+  time(&delays->t);
+  delays->sec = 0;
+  delays->old_sec = difftime(delays->t, mktime(&delays->time_stru));
+}
 
 std::string answer_to_string( boost::asio::streambuf &answer)
 {
@@ -43,32 +68,50 @@ void 		AsioClient::try_send(const std::string host)
   boost::asio::streambuf	f_buf;
   boost::system::error_code 	error;
   Command			command;
+  t_delays			delays;
+  t_ping			_ping;
 
-  this->socket.connect(endpoint, err);
-  if (err)
-    std::cout << "error" << std::endl;
-  boost::array<char, 2048> buf;
+  this->connect(endpoint, err);
+  this->init_time(&delays);
   while (1) {
     boost::asio::async_read(socket, answer,
 			    boost::asio::transfer_at_least(1),
 			    boost::bind(&AsioClient::handle_read_body, this,
 					boost::asio::placeholders::error));
     message = answer_to_string(answer);
+    if (!message.empty())
+      std::cout << message << std::endl;
     if (this->stop(message))
       return ;
-    if (command.process(this->modules, "!", f_buf))
-	{
-	  std::copy(message.begin(), message.end(), buf.begin());
-	  boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
-				   boost::bind(&AsioClient::handle_read_state,
-					       this, boost::asio::placeholders::error));
+    time(&delays.t);
+    /*if (((_ping.sec = difftime(delays.t, mktime(&delays.time_stru))) - _ping.old_sec) > 5) {
+      _ping.old_sec = _ping.sec;
+      if (ping(endpoint, err)) {*/
+	if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 3) {
+	  delays.old_sec = delays.sec;
+	  if (command.process(this->modules, "!", f_buf)) {
+	    boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
+				     boost::bind(&AsioClient::handle_read_state,
+						 this, boost::asio::placeholders::error));
+	  }
 	}
+     // }
+    //}
 /*	else
 	  error();*/
-    //exit(0);
-
   }
   this->socket.close();
+}
+
+bool AsioClient::connect(boost::asio::ip::tcp::endpoint endpoint, boost::system::error_code err) {
+  this->socket.connect(endpoint, err);
+  if (err) {
+    while (err) {
+      std::cout << "connect_error" << std::endl;
+      this->socket.connect(endpoint, err);
+    }
+  }
+  return true;
 }
 
 int main(int ac, char **av)

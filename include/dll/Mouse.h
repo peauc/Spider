@@ -23,14 +23,12 @@ class MouseClickListener : public IListener
 public:
     MouseClickListener();
     ~MouseClickListener();
-    void    GetMousePos();
     virtual int run();
-    int                 runThread();
     virtual int stop();
+	virtual std::string getFilenameOutput();
 
 private:
     s_mouseData     mouse;
-    bool            cont;
     std::ofstream   fichier;
 };
 

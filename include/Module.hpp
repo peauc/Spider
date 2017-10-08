@@ -48,7 +48,7 @@ public:
     char    getOpcode(); // identifier module
     void    getDatas(t_paquet *);
     std::string getFilename();
-
+	std::list<std::string> getElements() const;
     Module& operator=(Module copy);
 };
 

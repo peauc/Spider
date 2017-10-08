@@ -29,7 +29,8 @@ public:
 
 	virtual int run();
 	virtual int stop();
-	virtual std::string getFilenameOutput = 0;
+	virtual std::string getFilenameOutput();
+	virtual int getElements(std::list<std::string>& list);
 };
 
 #endif

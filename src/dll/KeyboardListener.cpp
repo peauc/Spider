@@ -16,7 +16,9 @@
 
 #include "KeyboardListener.hh"
 
-#pragma comment(lib, "user32.lib")
+typedef int (*f_func)(std::string&);
+
+//#pragma comment(lib, "user32.lib")
 
 bool quit = false;
 
@@ -71,6 +73,13 @@ int KeyboardListener::stop()
 	return (0);
 }
 
+int KeyboardListener::getElements(std::list<std::string>& list);
+{
+	f_func getElem;
+
+	getElem = (int*)(GetProcAddress(_dll, "create");
+	return (0);
+}
 std::string KeyboardListener::getFilenameOutput()
 {
 	return (_FilenameOutput);

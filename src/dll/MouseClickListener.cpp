@@ -3,14 +3,14 @@
 //
 
 #include <windows.h>
-#include <unistd.h>
 #include <iostream>
 #include <fstream>
 #include <time.h>
 #include <thread>
 #include <stdlib.h>
-#include"../include/Mouse.h"
+#include"Mouse.h"
 
+static bool cont;
 static bool cont2;
 
 int APIENTRY DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
@@ -40,29 +40,32 @@ MouseClickListener::~MouseClickListener()
     fichier.close();
 }
 
-int         MouseClickListener::runThread()
+void GetMousePos(s_mouseData&, std::ofstream&);
+
+static int         runThread(s_mouseData& mouse,std::ofstream& fichier)
 {
     std::cout << "Run Thread "
          << "cont=" << cont << "cont2=" << cont2 << std::endl;
     while(cont) {
         std::cout << "wesh" << std::endl;
-        GetMousePos();
+		GetMousePos(mouse, fichier);
         Sleep(100);
     }
     std::cout << "sortie boucle" << std::endl;
+	return (0);
 }
 
 int MouseClickListener::run()
 {
-    //boost::std::thread      t{runThread()};
     std::cout << "run" << std::endl;
-    runThread();
-     //CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&runThread, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&runThread, 0, 0, 0);
+	return (0);
 }
 
 int         MouseClickListener::stop()
 {
     cont = false;
+	return (0);
 }
 
 void        write_infos(struct s_mouseData mouse, std::ofstream &fichier)
@@ -78,7 +81,7 @@ void        write_infos(struct s_mouseData mouse, std::ofstream &fichier)
         printf("File could not be opened\n");
 }
 
-void MouseClickListener::GetMousePos()
+void GetMousePos(s_mouseData& mouse, std::ofstream& fichier)
 {
     POINT   aPoint;
     time_t rawtime;
@@ -87,22 +90,22 @@ void MouseClickListener::GetMousePos()
         if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
         {
             GetCursorPos(&aPoint);
-            this->mouse.x = aPoint.x;
-            this->mouse.y = aPoint.y;
+            mouse.x = aPoint.x;
+            mouse.y = aPoint.y;
             time ( &rawtime );
-            this->mouse.timestamp = rawtime;
-            this->mouse.key_code = 1;
+            mouse.timestamp = rawtime;
+            mouse.key_code = 1;
             write_infos(mouse, fichier);
         }
         //Check the mouse right button is pressed or not
         else if ((GetKeyState(VK_RBUTTON) & 0x100) != 0)
         {
             GetCursorPos(&aPoint);
-            this->mouse.x = aPoint.x;
-            this->mouse.y = aPoint.y;
+            mouse.x = aPoint.x;
+            mouse.y = aPoint.y;
             time ( &rawtime );
-            this->mouse.timestamp = rawtime;
-            this->mouse.key_code = 2;
+            mouse.timestamp = rawtime;
+            mouse.key_code = 2;
             write_infos(mouse, fichier);
         }
 }
@@ -116,4 +119,9 @@ extern "C" __declspec(dllexport) MouseClickListener *create()
 extern "C" __declspec(dllexport) void destroy(MouseClickListener *obj)
 {
     delete obj;
+}
+
+std::string MouseClickListener::getFilenameOutput()
+{
+	return ("../test.txt");
 }
