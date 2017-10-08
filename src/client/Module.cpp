@@ -20,14 +20,14 @@ Module::Module(char opcode, const std::string& filenameListener)
 
 Module::Module(Module& copy)
 {
-    this._fileNameListener = copy.getFilenameListener();
-    this._opcode = copy.getOpcode();
+    this->_filenameListener = copy.getFilenameListener();
+    this->_opcode = copy.getOpcode();
 }
 
 Module& Module::operator=(Module& mod)
 {
-    mod->setOpcode(this.getOpcode());
-    mod->etFilenameListener(this.getFilenameListener());
+    mod.setOpcode(this->getOpcode());
+    mod.setFilenameListener(this->getFilenameListener());
     return (*this);
 }
 
@@ -55,30 +55,29 @@ void    Module::setOpcode(char op)
     }
 }
 
-/* Doing */
-void    Module::addNextData(t_paquet *data)
+const std::string& Module::getFilenameOutput() const
 {
-    t_kbData *newData = new t_kbData;
-void    Module::getDatas(t_paquet *data) {
-    std::list<std::string>  c_datas; // AXEL = ta fonction
-
-    for (std::list<std::string>::iterator it = c_datas.begin(); it != c_datas.end(); it++) {
-        std::list<std::string>  c_data;
-        std::string             pch;
-
-std::string Module::getFilenameOutput()
-{
-    return (_listener->getFilenameOutput());
+	return ("");
+    //return (_listener->getFilenameOutput());
 }
+
+const std::string& Module::getFilenameListener() const
+{
+	return (this->_filenameListener);
+}
+
 
 void Module::run()
 {
     _listener->run();
 }
 
-size_t  Module::getDataSize()
-{
-    return (sizeof(t_kbData));
+void    Module::getDatas(t_paquet *data) {
+	std::list<std::string>  c_datas; // AXEL = ta fonction
+
+	for (std::list<std::string>::iterator it = c_datas.begin(); it != c_datas.end(); it++) {
+		std::list<std::string>  c_data;
+		std::string             pch;
         pch = std::strtok((char *)it->c_str(), ":");
         c_data.push_back(pch);
         while (pch != NULL)
@@ -120,8 +119,8 @@ int    Module::loadListener()
 {
     IListener* (*create)();
 
-    _dll = LoadLibrary(_filenameListener);
-    if (!hGetProcIDDLL)
+    _dll = LoadLibrary((LPCSTR)_filenameListener.c_str());
+    if (!_dll)
     {
         std::cout << "Could not laod the dynamic library" << std::endl;
         std::cout << "<Enter> to quit" << std::endl;
