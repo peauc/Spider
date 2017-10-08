@@ -73,19 +73,19 @@ void Module::run()
 }
 
 void    Module::getDatas(t_paquet *data) {
-	std::list<std::string>  c_datas; // AXEL = ta fonction
+	std::list<std::string>  c_datas = getElements();
 
 	for (std::list<std::string>::iterator it = c_datas.begin(); it != c_datas.end(); it++) {
 		std::list<std::string>  c_data;
 		std::string             pch;
         pch = std::strtok((char *)it->c_str(), ":");
         c_data.push_back(pch);
-        while (pch != NULL)
+        while (!pch.empty())
         {
             pch = std::strtok(NULL, ":");
             c_data.push_back(pch);
         }
-        if (isKB) {
+        if (_opcode == OP_KEYBOARD) {
             t_kbData    *kb = new t_kbData;
 
             kb->timestamp = std::stoul(c_data.front().c_str());
@@ -96,7 +96,7 @@ void    Module::getDatas(t_paquet *data) {
             c_data.pop_front();
             kb->next = data->kbdata;
             data->kbdata = kb;
-        } else if (isMouse) {
+        } else if (_opcode == OP_MOUSE) {
             t_mouseData *mouse = new t_mouseData;
 
             mouse->timestamp = std::stoul(c_data.front().c_str());

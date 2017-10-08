@@ -16,7 +16,7 @@ bool ClientObjectManager::sendMessageToClient(ServerClientObject::shared_ptr &cl
 	return (false);
 }
 
-bool ClientObjectManager::sendMessageToEveryClient(std::string message)
+bool ClientObjectManager::sendMessageToEveryClient(const std::string message)
 {
 	for (auto it = _clientList.begin(); it < _clientList.end(); it++)
 	{
