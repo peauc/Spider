@@ -11,6 +11,11 @@ class SpiderServer : public AsioServer {
 public:
 	SpiderServer();
 	~SpiderServer();
+
+	void queueReadingFromTerminal();
+private:
+	void readFromTerminal(const boost::system::error_code &code);
+	boost::asio::posix::stream_descriptor _stdIn;
 };
 
 #endif //CPP_SPIDER_KEYLOGGERSERVER_HPP

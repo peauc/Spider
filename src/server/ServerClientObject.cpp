@@ -8,7 +8,6 @@
 
 ServerClientObject::shared_ptr ServerClientObject::create(boost::asio::io_service &io_service)
 {
-	std::cout << "creating a new ServerClientObject\n";
 	return shared_ptr(new ServerClientObject(io_service));
 }
 
@@ -17,15 +16,18 @@ boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
 	return (_socket);
 }
 
-
+void ServerClientObject::write(const std::string &message)
+{
+	boost::asio::async_write(_socket, boost::asio::buffer(message),
+	                         boost::bind(&ServerClientObject::handle_write, shared_from_this(),
+	                                     boost::asio::placeholders::error,
+	                                     boost::asio::placeholders::bytes_transferred));
+}
 
 void ServerClientObject::start()
 {
 	std::cout << "Starting a new client\n";
-	boost::asio::async_write(_socket, boost::asio::buffer("hello client\n"),
-	                         boost::bind(&ServerClientObject::handle_write, shared_from_this(),
-	                                     boost::asio::placeholders::error,
-	                                     boost::asio::placeholders::bytes_transferred));
+	write("HelloClient\n");
 }
 
 void ServerClientObject::handle_write(const boost::system::error_code &error /*error*/, size_t bytes/*bytes_transferred*/)
@@ -45,16 +47,21 @@ void ServerClientObject::readContentHandler(const boost::system::error_code &err
 {
 	if (!err)
 	{
-		// Write all of the data that has been read so far.
-		std::cout << &_buffer;
+		_inputBuffer << &_buffer;
 
-		// Continue reading remaining data until EOF.
 		boost::asio::async_read(_socket, _buffer,
 		                        boost::asio::transfer_at_least(1),
 		                        boost::bind(&ServerClientObject::readContentHandler, this,
 		                                    boost::asio::placeholders::error));
 	} else if (err != boost::asio::error::eof)
 	{
-		std::cout << "Error: " << err << "\n";
+		std::cout << __FUNCTION__ <<" error: " << err << "\n";
 	}
+}
+std::string ServerClientObject::getInputBuffer()
+{
+	std::string string;
+
+	string = _inputBuffer.str();
+	return (string);
 }

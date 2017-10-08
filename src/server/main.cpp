@@ -3,7 +3,8 @@
 //
 
 #include <iostream>
-#include "server/AsioServer.hpp"
+#include <server/SpiderServer.hpp>
+
 
 //TODO:: Programme is able to chose his port with command line
 
@@ -11,14 +12,12 @@ int main()
 {
 	try
 	{
-		AsioServer server;
+		SpiderServer server;
 
 		server.start();
 		while(server.shouldRun())
 		{
 			server.tick();
-
-			sleep(1);
 		}
 	}
 	catch (std::exception &e)
