@@ -13,13 +13,6 @@ typedef struct s_kbData t_kbData;
 typedef struct s_mouseData t_mouseData;
 
 
-
-class SpiderClient : public AsioClient {
- public:
-  SpiderClient();
-  ~SpiderClient();
-};
-
 typedef struct 	s_paquet
 {
     char 		    opcode;

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <boost/array.hpp>
 #include "client/AsioClient.hpp"
+#include "client/Command.hpp"
 
 
 std::string answer_to_string( boost::asio::streambuf &answer)
@@ -17,7 +18,7 @@ std::string answer_to_string( boost::asio::streambuf &answer)
   return res;
 }
 
-bool 		AsioClient::check_exit(const std::string msg) const
+bool 		AsioClient::stop(const std::string msg) const
 {
   if (msg == "exit")
     return true;
@@ -39,9 +40,9 @@ void 		AsioClient::try_send(const std::string host)
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), this->port);
   std::string 			message;
   boost::system::error_code 	err;
-  boost::asio::const_buffer		f_buf;
+  boost::asio::streambuf	f_buf;
   boost::system::error_code 	error;
-  std::ostringstream 		ss;
+  Command			command;
 
   this->socket.connect(endpoint, err);
   if (err)
@@ -53,33 +54,34 @@ void 		AsioClient::try_send(const std::string host)
 			    boost::bind(&AsioClient::handle_read_body, this,
 					boost::asio::placeholders::error));
     message = answer_to_string(answer);
-    if (this->check_exit(ss.str()))
+    if (this->stop(message))
       return ;
-    //if (NULL != (message = command.process(this->modules, ss.str())))
-	//{
+    if (command.process(this->modules, "!", f_buf))
+	{
 	  std::copy(message.begin(), message.end(), buf.begin());
-	  boost::asio::async_write(socket, boost::asio::buffer(f_buf),
+	  boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				   boost::bind(&AsioClient::handle_read_state,
 					       this, boost::asio::placeholders::error));
-	//}
+	}
 /*	else
 	  error();*/
+    //exit(0);
 
   }
   this->socket.close();
 }
 
-/*int main(int ac, char **av)
+int main(int ac, char **av)
 {
   boost::asio::io_service io_service;
   io_service.run();
 
-  if (ac != 2)
+  if (ac != 3)
   {
-    std::cout << "Usage: ./client <port>" << std::endl;
+    std::cout << "Usage: ./client <ip_adress> <port>" << std::endl;
     return 0;
   }
-  AsioClient	Asiatic(io_service, std::stoi(av[1]));
-  Asiatic.try_send("127.0.0.1");
+  AsioClient	Asiatic(io_service, (unsigned short)std::stoi(av[2]));
+  Asiatic.try_send(av[1]);
   return 0;
-}*/
+}

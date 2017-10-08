@@ -5,11 +5,11 @@
 #ifndef CPP_SPIDER_ASIOSERVER_HPP
 #define CPP_SPIDER_ASIOSERVER_HPP
 
-#include "AServer.hpp"
-#include "server/ServerClientObject.hpp"
-#include "ClientObjectManager.hpp"
-
 #define NUMBER_OF_POLL_PER_TICK 3
+
+#include "ClientObjectManager.hpp"
+#include "server/AServer.hpp"
+#include "server/ServerClientObject.hpp"
 
 class AsioServer : public AServer {
 public:
@@ -20,7 +20,6 @@ public:
 	AsioServer();
 	AsioServer(AsioServer &server) = delete;
 	~AsioServer() override ;
-
 
 	boost::asio::io_service &getIoService();
 	bool shouldRun();
