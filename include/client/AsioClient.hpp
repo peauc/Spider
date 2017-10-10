@@ -8,7 +8,7 @@
 #include <boost/asio.hpp>
 #include <iostream>
 #include <time.h>
-#include "client/Command.hpp"
+//#include "client/Command.hpp"
 
 class Module;
 
@@ -38,7 +38,7 @@ public:
   unsigned short			port;
   boost::asio::ip::tcp::socket 		socket;
   boost::asio::streambuf 		answer;
-  std::map<char, Module>		modules;
+  //std::map<char, Module>		modules;
 
 
 };

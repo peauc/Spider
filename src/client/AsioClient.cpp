@@ -53,28 +53,44 @@ void 		AsioClient::try_send(const std::string host)
   std::string 			message;
   boost::system::error_code 	err;
   boost::asio::streambuf	f_buf;
-  Command			command;
+  //Command			command;
   t_delays			delays;
+  boost::system::error_code 	error;
 
   this->connect(endpoint, err);
   this->init_time(&delays);
   while (1) {
     /* async_read */
     //todo::async_read
+    try {
+      boost::asio::async_read(socket, answer, boost::asio::transfer_at_least(1),
+			      boost::bind(&AsioClient::handle_read_body, this,
+					  boost::asio::placeholders::error));
+    }
+    catch (std::exception e)
+    {
+      std::cerr << e.what() << std::endl;
+    }
+    message = answer_to_string(answer);
+    if (!message.empty())
+      std::cout << message << std::endl;
+    if (this->stop(message))
+      return ;
     time(&delays.t);
-    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 60) {
+    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 5) {
       delays.old_sec = delays.sec;
-      if (command.process(this->modules, "0x04", f_buf)) {
+      /*if (command.process(this->modules, "0x04", f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
 
       }
+
       if (command.process(this->modules, "0x05", f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
-      }
+      }*/
     }
   }
   this->socket.close();
