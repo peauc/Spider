@@ -11,6 +11,8 @@
 #ifndef ILISTENER_HH_
 # define ILISTENER_HH_
 
+#include <list>
+
 class IListener
 {
 public:

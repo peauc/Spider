@@ -19,10 +19,10 @@ class   Command
 public:
     Command();
     ~Command();
-    bool	process(std::map<char, Module>, std::string, boost::asio::streambuf &);
+    bool	process(std::map<char, Module *>, char, boost::asio::streambuf &);
     std::string getUsername();
     std::string getHostname();
-    t_paquet	*getMessageFormat(Module&);
+    t_paquet	*getMessageFormat(Module *);
 };
 
 #endif //COMMAND_HPP

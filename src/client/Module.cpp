@@ -17,6 +17,7 @@ Module::Module(char opcode, const std::string& filenameListener)
 {
     this->_opcode = opcode;
     this->_filenameListener = filenameListener;
+	loadListener();
 }
 
 /*Module::Module(Module& copy)
@@ -50,9 +51,9 @@ void    Module::setOpcode(char op)
     {
         this->_opcode = op;
         if (this->_opcode == OP_KEYBOARD)
-            _filenameListener = "libKeyboardListener.dll";
+            _filenameListener = "KeyboardListener.dll";
         else if (this->_opcode == OP_KEYBOARD)
-            _filenameListener = "libMouseClickListener.dll";
+            _filenameListener = "MouseClickListener.dll";
     }
 }
 
@@ -71,6 +72,19 @@ const std::string& Module::getFilenameListener() const
 void Module::run()
 {
     _listener->run();
+}
+
+std::list<std::string> Module::getElements()
+{
+	std::list<std::string> tmp;
+
+	try {
+		_listener->getElements(tmp);
+	}
+	catch (std::exception e) {
+		std::cout << e.what() << std::endl;
+	}
+	return (tmp);
 }
 
 void    Module::getDatas(t_paquet *data) {
@@ -165,10 +179,3 @@ void    Module::load(char opcode)
     setOpcode(opcode);
     loadListener();
 }
-
-std::list<std::string> Module::getElements() const
-{
-	std::list<std::string> tmp;
-	return (tmp);
-}
-
