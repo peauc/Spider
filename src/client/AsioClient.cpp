@@ -57,13 +57,10 @@ void 		AsioClient::try_send(const std::string host)
   boost::asio::streambuf	f_buf;
   Command			command;
   t_delays			delays;
-  boost::system::error_code 	error;
 
   this->connect(endpoint, err);
   this->init_time(&delays);
   while (1) {
-    /* async_read */
-    //todo::async_read
     try {
       boost::asio::async_read(socket, answer, boost::asio::transfer_at_least(1),
 			      boost::bind(&AsioClient::handle_read_body, this,
@@ -94,7 +91,7 @@ void 		AsioClient::try_send(const std::string host)
       }
     }
   }
-  this->socket.close();
+  //this->socket.close();
 }
 
 bool AsioClient::connect(boost::asio::ip::tcp::endpoint endpoint, boost::system::error_code err) {

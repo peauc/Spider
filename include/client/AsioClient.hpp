@@ -32,7 +32,6 @@ public:
   bool 	connect(boost::asio::ip::tcp::endpoint, boost::system::error_code);
   bool 	stop(const std::string) const;
   void	init_time(t_delays *);
-  bool 	ping(boost::asio::ip::tcp::endpoint, boost::system::error_code);
 
  private:
   unsigned short			port;

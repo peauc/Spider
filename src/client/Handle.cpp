@@ -55,7 +55,7 @@ void AsioClient::handle_read_body(const boost::system::error_code& error)
 {
 	if (!error)
 	{
-		std::cout << &answer;
+		std::cout << &answer << std::endl;
 		boost::asio::async_read(socket, answer,
 		                        boost::asio::transfer_at_least(1),
 		                        boost::bind(&AsioClient::handle_read_body, this,

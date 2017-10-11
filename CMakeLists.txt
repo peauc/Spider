@@ -18,9 +18,10 @@ file(GLOB_RECURSE SOURCE_SRV
 file(GLOB_RECURSE INCLUDE_SRV
         include/server/*.hpp)
 file(GLOB_RECURSE SOURCE_CLI
-        src/client/*.cpp)
+        src/client/AsioClient.cpp
+        src/client/Handle.cpp)
 file(GLOB_RECURSE INCLUDE_CLI
-        include/client/*.h*)
+        include/client/AsioClient.hpp)
 
 add_executable(cpp_spider_server ${INCLUDE_SRV} ${SOURCE_SRV})
 add_executable(cpp_spider_client ${INCLUDE_CLI} ${SOURCE_CLI})
