@@ -54,7 +54,10 @@ void SpiderServer::parseInputRequest(const std::string &string)
 		try
 		{
 			if (string.find(it->second) != std::string::npos)
-				sendToEveryClient(std::string(1, it->first));
+			{
+				std::cout << it->first << std::endl;
+			  sendToEveryClient(std::string(1, it->first));
+			}
 		}
 		catch (std::exception &e)
 		{

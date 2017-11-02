@@ -1,0 +1,20 @@
+[TODO LIST]
+
+SERVER :
+       [.] Faire un mode verbeux
+       [.] Ajouter messages de debug
+       [.] Gérer les exceptions avec message de debug
+       [.] fix les leaks de mémoire #16GO
+
+CLIENT :
+       [.] Faire un mode verbeux
+       [.] Ajouter messages de debug
+       [.] Gérer les exceptions
+       [.] Tester
+
+Modules dll :
+	[OK] Faire mode verbeux
+	[OK] Load lib #functionNotLocated
+	[.] Ajouter messages de debug
+	[.] Gérer les exceptions
+	

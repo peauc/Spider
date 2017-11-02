@@ -5,8 +5,8 @@
 #ifndef MODULE_HPP
 #define MODULE_HPP
 
-#define OP_KEYBOARD 0x01
-#define OP_MOUSE 0x02
+#define OP_KEYBOARD 0x04
+#define OP_MOUSE 0x05
 
 # include "IListener.hh"
 # include "client/SpiderClient.hpp"
@@ -45,7 +45,7 @@ public:
 //	char    getOpcode(); // identifier module
 	void    getDatas(t_paquet *);
 	std::string getFilename();
-	std::list<std::string> getElements() const;
+	std::list<std::string> getElements();
 };
 
 #endif //MODULE_HPP
