@@ -14,6 +14,8 @@ class ServerClientObject : public boost::enable_shared_from_this<ServerClientObj
 {
 public:
 	typedef boost::shared_ptr<ServerClientObject> shared_ptr;
+
+	explicit ServerClientObject(boost::asio::io_service &io_service) : _socket(io_service) {}
 	static shared_ptr create(boost::asio::io_service &io_service);
 	boost::asio::ip::tcp::socket &getSocket();
 	void tryReading();
@@ -23,7 +25,6 @@ public:
 	std::string   getInputBuffer();
 	void start();
 private:
-	explicit ServerClientObject(boost::asio::io_service &io_service) : _socket(io_service) {}
 	void handle_write(const boost::system::error_code & /*error*/, size_t /*bytes_transferred*/);
 	void readContentHandler(const boost::system::error_code &errors);
 

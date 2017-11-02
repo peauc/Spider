@@ -5,8 +5,6 @@
 #ifndef CPP_SPIDER_ASIOSERVER_HPP
 #define CPP_SPIDER_ASIOSERVER_HPP
 
-#define NUMBER_OF_POLL_PER_TICK 3
-
 #include "ClientObjectManager.hpp"
 #include "server/AServer.hpp"
 #include "server/ServerClientObject.hpp"
@@ -39,6 +37,7 @@ private:
 	boost::asio::io_service _ioService;
 	boost::asio::ip::tcp::acceptor _acceptor;
 
+	bool shouldAccept;
 };
 
 #endif //CPP_SPIDER_ASIOSERVER_HPP

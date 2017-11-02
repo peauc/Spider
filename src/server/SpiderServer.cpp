@@ -27,8 +27,7 @@ void SpiderServer::queueReadingFromTerminal()
 	                        boost::asio::transfer_at_least(1),
 	                        boost::bind(&SpiderServer::readFromTerminal, this,
 	                                    boost::asio::placeholders::error));
-
-	 }
+}
 
 void SpiderServer::readFromTerminal(const boost::system::error_code &error)
 {
@@ -65,11 +64,12 @@ void SpiderServer::parseInputRequest(const std::string &string)
 }
 void SpiderServer::tick()
 {
-	std::vector<std::string>    clientInputList;
+	std::vector<std::string> clientInputList;
 
 	AsioServer::tick();
 	queueReadingFromTerminal();
 	clientInputList = getClientObjectManager().getEveryClientInput();
+	getIoService().run();
 	for (auto it = clientInputList.begin(); it < clientInputList.end(); it++)
 	{
 		if (!((*it).empty()))
@@ -105,4 +105,5 @@ void SpiderServer::tick()
 			}
 		}
 	}
+	getIoService().reset();
 }

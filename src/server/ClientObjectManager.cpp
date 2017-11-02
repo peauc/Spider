@@ -57,12 +57,10 @@ bool ClientObjectManager::kickClient(ServerClientObject::shared_ptr &ptr)
 
 ClientObjectManager::ClientObjectManager()
 {
-
 }
 
 ClientObjectManager::~ClientObjectManager()
 {
-
 }
 
 std::vector<std::string> ClientObjectManager::getEveryClientInput()

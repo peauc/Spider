@@ -2,6 +2,8 @@
 // Created by Clément Péau on 27/09/2017.
 //
 
+
+
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
@@ -27,6 +29,7 @@ bool AsioServer::stop()
 
 bool AsioServer::start()
 {
+	shouldAccept = true;
 	start_accept();
 	return (true);
 }
@@ -41,6 +44,7 @@ void AsioServer::tick()
 
 void AsioServer::handle_accept(ServerClientObject::shared_ptr newClient, const boost::system::error_code &error)
 {
+	shouldAccept = true;
 	std::cout << "handle accept\n";
 	if (!error)
 	{
@@ -55,9 +59,10 @@ void AsioServer::handle_accept(ServerClientObject::shared_ptr newClient, const b
 void AsioServer::start_accept()
 {
 	auto newClient = ServerClientObject::create(_ioService);
-
 	_acceptor.async_accept(newClient->getSocket(),
-	                       boost::bind(&AsioServer::handle_accept, this, newClient, boost::asio::placeholders::error));
+	                       boost::bind(&AsioServer::handle_accept, this, newClient,
+	                                   boost::asio::placeholders::error));
+	shouldAccept = false;
 }
 
 

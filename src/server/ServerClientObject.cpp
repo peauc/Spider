@@ -4,11 +4,12 @@
 
 #include <iostream>
 #include <boost/bind.hpp>
+#include <boost/smart_ptr/make_shared.hpp>
 #include "server/ServerClientObject.hpp"
 
 ServerClientObject::shared_ptr ServerClientObject::create(boost::asio::io_service &io_service)
 {
-	return shared_ptr(new ServerClientObject(io_service));
+	return shared_ptr(boost::make_shared<ServerClientObject>(io_service));
 }
 
 boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
@@ -19,7 +20,7 @@ boost::asio::ip::tcp::socket &ServerClientObject::getSocket()
 void ServerClientObject::write(const std::string &message)
 {
 	boost::asio::async_write(_socket, boost::asio::buffer(message),
-	                         boost::bind(&ServerClientObject::handle_write, shared_from_this(),
+	                         boost::bind(&ServerClientObject::handle_write, this,
 	                                     boost::asio::placeholders::error,
 	                                     boost::asio::placeholders::bytes_transferred));
 }
@@ -44,7 +45,7 @@ void ServerClientObject::tryReading()
 {
 	boost::asio::async_read(_socket, _buffer,
 	                        boost::asio::transfer_at_least(1),
-	                        boost::bind(&ServerClientObject::readContentHandler, this,
+	                        boost::bind(&ServerClientObject::readContentHandler, shared_from_this(),
 	                                    boost::asio::placeholders::error));
 }
 
